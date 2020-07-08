@@ -1,0 +1,818 @@
+<view>
+
+	<!-- 搜索栏 -->
+
+	<view class="searchBarBox">
+		<view class="{{ focus ? 'onSearch_arr' : 'search_arr' }}">
+			<icon wx:if="{{!focus}}" class="searchIcon" size='48rpx' type='search'></icon>
+
+			<view wx:if="{{focus}}">
+				<picker bindchange="typeChange" value="{{typeIndex}}" range="{{type}}">
+					<view class="data">{{type[typeIndex]}}
+						<image src="../../images/down.png" class="down" />
+					</view>
+				</picker>
+			</view>
+			<input placeholder="书籍资料/电子产品/生活用品..." value="{{searchValue}}" bindconfirm="Search" bindfocus='onFocus' bindblur='onBlur' style="width:100%"/>
+		</view>
+		<view wx:if="{{!focus}}" catchtap="toMessage">
+			<icon class="iconfont icon-liuyan iconMessage"></icon>
+			<view class="notify" wx:if="{{notifyNums!=0}}">{{notifyNums}}</view>
+			<!-- <image src="../../images/words.png" class="down" /> -->
+		</view>
+		<view wx:if="{{focus}}" class='cancelBtn' bindtap="onCancelSearch">
+			<button>取消</button>
+		</view>
+	</view>
+
+	<!-- 搜索激活栏 -->
+
+	<view wx:if="{{focus}}" class="searchBarShade" style="height:{{winHeight}}px">
+
+		<view class="history">
+			<view class="historyTopic">搜索历史</view>
+			<view wx:for="{{searchHistory}}" class="historyItem" bindtap="Search" data-src="{{item}}">{{item}}</view>
+		</view>
+
+		<view class="history">
+			<view class="historyTopic">搜索热榜</view>
+			<view wx:for="{{searchBoard}}" class="historyItem" bindtap="Search" data-src="{{item}}">{{item}}</view>
+		</view>
+
+	</view>
+
+	<!-- 轮播图 -->
+
+	<swiper class="indexSwiper" indicator-dots="true" autoplay="true">
+		<swiper-item wx:for="{{swiperAddress}}" class="indexSwiperItem">
+			<image src="{{item}}" class="indexSwiperImage" mode='scaleToFill'></image>
+		</swiper-item>
+	</swiper>
+
+
+	<!-- 导航栏 -->
+
+	<view class="swiper-tab">
+		<view class="swiper-tab-list" data-current="0" bindtap="swichNav">
+			<view class="{{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">
+				转让
+			</view>
+		</view>
+		<view class="swiper-tab-list" data-current="1" bindtap="swichNav">
+			<view class="{{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">
+				求购
+			</view>
+		</view>
+		<view class="swiper-tab-list" data-current="2" bindtap="swichNav">
+			<view class="{{currentTab==2 ? 'on' : ''}}" data-current="2" bindtap="swichNav">
+				拼单
+			</view>
+		</view>
+		<view class="swiper-tab-list" data-current="3" bindtap="swichNav">
+			<view class="{{currentTab==3 ? 'on' : ''}}" data-current="3" bindtap="swichNav">
+				精选
+			</view>
+		</view>
+		<view class="swiper-tab-list" data-current="4" bindtap="swichNav">
+			<view class="{{currentTab==4 ? 'on' : ''}}" data-current="4" bindtap="swichNav">
+				全部分类
+			</view>
+		</view>
+	</view>
+
+
+
+	<!-- 商品区 -->
+
+
+	<view class="item"></view>
+
+	<swiper current="{{currentTab}}" class="swiper-box" duration="300" bindchange="bindChange" style="height:{{onTop ?1000000:winHeight-100}}px">
+
+
+		<!-- 转让 -->
+		<swiper-item>
+			<scroll-view bindscrolltolower="pullUpLoad" scroll-y="true" style="height:{{onTop ?1000000:winHeight -100}}px">
+				<view wx:if="{{list.length==0}}" class="noData">
+					<icon class="iconfont icon-wutupianyemian"></icon>
+					<view>这里还没有商品信息哦！</view>
+				</view>
+				<view wx:if="{{top}}" class="tips">
+					<text>下拉刷新</text>
+				</view>
+				<block wx:for="{{ list }}" wx:key="{{index}}">
+					<view class='info-item' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+						<view wx:if="{{item.goodTradeState==1}}" class='mask'>
+							<image style="" mode="" src="../../images/done.png"></image>
+						</view>
+						<view class='leftSide'>
+							<view class='showPicture'>
+								<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+								<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+								<view class='tag'>#{{item.goodCatagory}}</view>
+							</view>
+						</view>
+
+						<view class='rightSide'>
+							<view class='title'>
+								<text>{{ item.goodTitle }}</text>
+							</view>
+
+							<view class='priceAndWatch'>
+								<text class='price'> ￥{{ item.goodPrice }}</text>
+								<text class='watch'> {{ item.goodClick }}人|浏览</text>
+							</view>
+
+
+							<view class='timeCollect clearfix'>
+								<view class='date'>{{ item.goodDate }}</view>
+							</view>
+						</view>
+					</view>
+
+
+				</block>
+			</scroll-view>
+		</swiper-item>
+
+
+		<!-- 求购 -->
+		<swiper-item>
+			<scroll-view bindscrolltolower="pullUpLoad1" scroll-y="true" style="height:{{onTop ?1000000:winHeight -100}}px">
+				<view wx:if="{{list1.length==0}}" class="noData">
+					<icon class="iconfont icon-wutupianyemian"></icon>
+					<view>这里还没有商品信息哦！</view>
+				</view>
+				<view wx:if="{{top}}" class="tips">
+					<text>下拉刷新</text>
+				</view>
+				<block wx:for="{{ list1 }}" wx:key="{{index}}">
+
+					<view class='info-item' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+
+						<view wx:if="{{item.goodTradeState==1}}" class='mask'>
+							<image style="" mode="" src="../../images/done.png"></image>
+						</view>
+						<view class='leftSide'>
+							<view class='showPicture'>
+								<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+								<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+								<view class='tag'>#{{item.goodCatagory}}</view>
+							</view>
+						</view>
+
+						<view class='rightSide'>
+							<view class='title'>
+								<text>{{ item.goodTitle }}</text>
+							</view>
+
+							<view class='priceAndWatch'>
+								<text class='price'> ￥{{ item.goodPrice }}</text>
+								<text class='watch'> {{ item.goodClick }}人|浏览</text>
+							</view>
+
+
+							<view class='timeCollect clearfix'>
+								<view class='date'>{{ item.goodDate }}</view>
+							</view>
+						</view>
+
+					</view>
+
+
+
+				</block>
+			</scroll-view>
+		</swiper-item>
+
+
+		<!-- 拼单 -->
+		<swiper-item>
+			<scroll-view bindscrolltolower="pullUpLoad2" scroll-y="true" style="height:{{onTop ?1000000:winHeight -100}}px">
+				<view wx:if="{{list2.length==0}}" class="noData">
+					<icon class="iconfont icon-wutupianyemian"></icon>
+					<view>这里还没有商品信息哦！</view>
+				</view>
+				<view wx:if="{{top}}" class="tips">
+					<text>下拉刷新</text>
+				</view>
+				<block wx:for="{{ list2 }}" wx:key="{{index}}">
+
+					<view class='info-item' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+
+						<view wx:if="{{item.goodTradeState==1}}" class='mask'>
+							<image style="" mode="" src="../../images/done.png"></image>
+						</view>
+						<view class='leftSide'>
+							<view class='showPicture'>
+								<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+								<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+								<view class='tag'>#{{item.goodCatagory}}</view>
+							</view>
+						</view>
+
+						<view class='rightSide'>
+							<view class='title'>
+								<text>{{ item.goodTitle }}</text>
+							</view>
+
+							<view class='priceAndWatch'>
+								<text class='price'> ￥{{ item.goodPrice }}</text>
+								<text class='watch'> {{ item.goodClick }}人|浏览</text>
+							</view>
+
+
+							<view class='timeCollect clearfix'>
+								<view class='date'>{{ item.goodDate }}</view>
+							</view>
+						</view>
+
+					</view>
+				</block>
+			</scroll-view>
+		</swiper-item>
+
+
+		<!-- 精选 -->
+		<swiper-item>
+			<scroll-view bindscrolltolower="pullUpLoad3" scroll-y="true" style="height:{{onTop ?1000000:winHeight -100}}px">
+				<view wx:if="{{list3.length==0}}" class="noData">
+					<icon class="iconfont icon-wutupianyemian"></icon>
+					<view>这里还没有商品信息哦！</view>
+				</view>
+				<block wx:for="{{list3}}" wx:key="{{index}}">
+					<view class='speItem'>
+						<view class="speTopSide">
+							<text class="leftText">【{{item.rsCampus}}】</text>
+							<text class="rightText">{{item.rsTitle}}</text>
+						</view>
+						<view class='speLeftSide'>
+							<view class='showPicture'>
+								<image style="" mode="scaleToFill" src="{{item.rsFirstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+								<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+							</view>
+						</view>
+
+						<view class='speRightSide'>
+							<text>{{ item.rsDesc }}</text>
+						</view>
+
+						<view class="speBottomSide">
+							<view>{{ item.rsDate }}</view>
+							<view>
+								<text class="goodClick"> {{ item.rsClick }}人|浏览</text>
+								<icon class="iconfont icon-shoucang_shixin iconCollection" wx:if="{{item.isCollection}}" bindtap="cancelCollect" data-id="{{item.rsID}}" data-type="rs" data-index="{{index}}"></icon>
+								<icon class="iconfont icon-shoucang iconCollection" wx:if="{{!item.isCollection}}" bindtap="onCollect" data-id="{{item.rsID}}" data-type="rs" data-index="{{index}}"></icon>
+							</view>
+						</view>
+
+					</view>
+					<view></view>
+				</block>
+			</scroll-view>
+
+		</swiper-item>
+
+
+		<!-- 全部 -->
+		<swiper-item>
+
+			<view class="indexAll">
+
+				<scroll-view scroll-y="true" class="scrollTag" style="height:{{onTop ?1000000:winHeight-100}}px">
+					<view class="secSwiperTab">
+						<view wx:for="{{goodType}}" class="secSwiperTabList" data-current="{{index}}" bindtap="swichSecNav">
+							<view class="{{currentSecTab==index ? 'on' : ''}}" data-current="{{index}}" bindtap="swichSecNav">
+								{{item}}
+							</view>
+						</view>
+					</view>
+				</scroll-view>
+
+				<swiper current="{{currentSecTab}}" class="secSwiperBox" duration="300" style="height:{{onTop ?1000000:winHeight-100}}px"  bindchange="bindChangeAll">
+
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listFollow.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>你没有关注，或者关注人没有商品喔！</view>
+							</view>
+							<block wx:for="{{listFollow}}" wx:key="{{index}}">
+
+				<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+
+				</view>
+
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+
+					<!-- 0 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll0.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll0}}" wx:key="{{index}}">
+				<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+
+				</view>
+							
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+
+					<!-- 1 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll1.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll1}}" wx:key="{{index}}">
+
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+
+					<!-- 2 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll2.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll2}}" wx:key="{{index}}">
+
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 3 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll3.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll3}}" wx:key="{{index}}">
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+		
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 4 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll4.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll4}}" wx:key="{{index}}">
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 5 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll5.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll5}}" wx:key="{{index}}">
+
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 6 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll6.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll6}}" wx:key="{{index}}">
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 7 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll7.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll7}}" wx:key="{{index}}">
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 8 -->
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll8.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll8}}" wx:key="{{index}}">
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+					<!-- 9 -->
+
+					<swiper-item>
+						<scroll-view bindscrolltoupper="refresh" bindscrolltolower="getNewAll" scroll-y="true" style="height:{{onTop ?1000000:winHeight-100}}px">
+							<view wx:if="{{listAll9.length==0}}" class="noData">
+								<icon class="iconfont icon-wutupianyemian"></icon>
+								<view>这里还没有商品信息哦！</view>
+							</view>
+							<block wx:for="{{listAll9}}" wx:key="{{index}}">
+
+											<view  class='allItem' catchtap="toDetail" data-id="{{item.goodID}}" data-type="{{item.goodType}}" data-state="{{item.goodTradeState}}">
+
+									<view wx:if="{{item.goodTradeState===1}}" class='mask'>
+										<image style="" mode="" src="../../images/done.png"></image>
+									</view>
+
+
+
+									<view class="headPicture">
+										<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.userAvartar!=null}}"></image>
+										<image wx:if="{{item.userAvartar==null}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+									</view>
+
+									<view class="allRightSide">
+										<text class="showUserName">{{item.userName}}</text>
+										<text class="showDetial">{{item.goodTitle}}</text>
+										<view class='showPictureAll'>
+											<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+											<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+											<view class='tag'>{{item.goodTypeShow}}</view>
+										</view>
+
+										<view class='priceAndWatch'>
+											<text class='price'>￥{{item.goodPrice}}</text>
+											<text class='watch'>{{item.goodClick}}人|浏览</text>
+										</view>
+
+									</view>
+
+
+				</view>
+
+								<view></view>
+							</block>
+						</scroll-view>
+
+					</swiper-item>
+
+
+				</swiper>
+
+			</view>
+		</swiper-item>
+
+
+	</swiper>
+
+
+
+
+
+</view>

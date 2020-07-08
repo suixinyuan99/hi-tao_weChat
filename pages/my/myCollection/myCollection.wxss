@@ -74,7 +74,7 @@
 .swiper-box{ 
   position: absolute;
   display: inline-block; 
-  margin-top:160rpx;
+  margin-top:100rpx;
   height: 85%; 
   width: 100%; 
   overflow: hidden; 
@@ -92,22 +92,27 @@
   position: relative;
   /*padding-bottom: 30rpx;
   padding-right:20rpx;*/
-  padding:20rpx 20rpx 10rpx 40rpx;
+  padding:20rpx 20rpx 20rpx 20rpx;
 }
-.info-item .mask{
+.info-item .mask {
   position: absolute;
   height: 220rpx;
   line-height: 280rpx;
   width: 100%;
   text-align: center;
   vertical-align: middle;
-  z-index:990;
-  background-color: rgba(255,255,255,0.7);
+  z-index: 990;
+  background-color: rgba(255, 255, 255, 0.7);
 }
-.info-item .mask image{
-  transform:rotate(-15deg);
-  height: 40%;
-  width:260rpx;
+
+
+.info-item .mask image {
+  /* transform: rotate(-15deg); */
+  position: absolute;
+  bottom: 0;
+  height: 120rpx;
+  width: 120rpx;
+  right: 60rpx;
 }
 .leftSide{
   flex:1;
@@ -178,14 +183,27 @@
     bottom: 0rpx;
     font-size: 26rpx;
     color:#666;
+    width: 100%;
   }
   .date{
     float: left;
     height:45rpx;
-    line-height: 45rpx;
+    line-height: 70rpx;
   }
+  .cancelBottom{
+    float: right;
+    height: 70rpx;
+    line-height: 70rpx;
+    width: 140rpx;
+    border:1rpx #FF6201 solid;
+    color: #FF6201;
+    text-align: center;
+  }
+
+
   .tag{
     float: left;
+    color: #fff;
   }
   .tag image{
     margin-left: 66rpx;
@@ -224,4 +242,86 @@
 }
 .list{
   border-bottom: 1px solid #aaa;
+}
+
+/* NEW */
+.showBlock{
+  background-color: #fff;
+  border-radius: 20rpx;
+  margin-top: 20rpx;
+  width: 97%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.scrollBox{
+background-color: rgba(181, 175, 175, 0.16);
+
+}
+
+
+
+/* spe */
+
+
+.speTopSide{
+  width: 100%;
+  margin-bottom: 20rpx;
+  margin-left: 10rpx;
+}
+.leftText{
+  font-size: 32rpx;
+}
+.rightText{
+  margin-left: 30rpx;
+  font-size: 28rpx;
+}
+
+.speLeftSide{
+  width: 35%;
+
+}
+
+.speRightSide{
+  display: flex;
+  align-items:center;
+  width: 65%;
+  font-size: 28rpx;
+}
+
+.speBottomSide{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  font-size: 28rpx;
+  margin : 10rpx 10rpx;
+  color: #A3A3A3;
+}
+.speItem {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  /*padding-bottom: 30rpx;
+  padding-right:20rpx;*/
+  padding: 20rpx 20rpx 10rpx 40rpx;
+  margin:10rpx 16rpx 10rpx 16rpx;
+  background-color: #fff;
+  border-radius: 20rpx 20rpx 20rpx 20rpx;
+  flex-wrap:wrap;
+}
+
+.iconCollection{
+  color: #FF6201;
+  margin-left: 30rpx;
+  font-size: 60rpx;
+  float:right;
+
+}
+.goodClick{
+  line-height: 60rpx;
 }

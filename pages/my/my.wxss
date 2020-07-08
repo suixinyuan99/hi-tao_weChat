@@ -1,3 +1,6 @@
+
+@import "../../iconfont.wxss";
+
 page{
 	background: #eee;
 }
@@ -19,8 +22,34 @@ page{
 .header .center{
 	flex:2;
 	font-size: 35rpx;
-	color: #F3490A;
+	color: #fff;
+	background-color: #E34A07;
 	margin: auto;
+}
+.header .center2{
+	flex:2;
+	font-size: 35rpx;
+	color: #E34A07;
+	margin: auto;
+}
+
+.header .centerAll{
+	flex:2;
+	margin: auto;
+}
+
+.nickName{
+	font-size: 35rpx;
+	color: #E51C3C;
+}
+
+.follwAndFans{
+  font-size: 26rpx;
+}
+
+.break{
+  font-size: 40rpx;
+  color: #bbb;
 }
 /*button.center{*/
 	/*background: #F3490A;*/

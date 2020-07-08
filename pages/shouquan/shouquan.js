@@ -29,10 +29,11 @@ Page({
                     wx.getUserInfo({
                         success: function (res) {
                             console.log("用户已经授权")
+                            app.globalData.userShouquan=true;
                             //用户已经授权过
                             if (_this.data.jump == "index") {
                                 wx.switchTab({
-                                    url: '../index/index',
+                                    url: '../home/home',
                                 })
                             } else {
                                 wx.redirectTo({
@@ -70,18 +71,20 @@ Page({
                 success: res_login => {
                     app.request(api.getOpenid, {
                         code: res_login.code,
-                    }, "GET", this.getOpenidSuccess)
+                    }, "POST", this.getOpenidSuccess)
                 }
             })
         } else {
+            wx.hideToast();
             wx.showModal({
                 title: '温馨提示',
-                content: '授权失败，将无法查看商品详情页！',
+                content: '授权失败，将无法与用户互动或发布商品！',
                 success(res) {
                     if (res.confirm) {
-                        return
+                        wx.navigateBack()
+
                     } else if (res.cancel) {
-                        return
+                        wx.navigateBack()
                     }
                 }
             })
@@ -96,11 +99,11 @@ Page({
                 content: '服务器开小差了～请退出微信后再试',
             })
         }else{
-            app.globalData.openId = res.data.openid;
+            app.globalData.openId = res.data.result;
             app.globalData.session_key = res.data.session_key;
             //将用户的信息存入数据库
             app.request(api.login, {
-                openid: app.globalData.openId,
+                userOpenid: app.globalData.openId,
                 userName: app.globalData.userInfo.nickName,
                 userAvatarUrl: app.globalData.userInfo.avatarUrl
             }, "POST", this.getLoginSuccess)
@@ -115,7 +118,8 @@ Page({
                 content: '服务器开小差了～请退出微信后再试',
             })
         }else{
-            if(res.data.object.userState==0){
+            app.globalData.userShouquan=true
+            if(res.data.result.userState==1){
                 console.log("该用户已认证");
                 app.globalData.userState=0;
             }else{
@@ -123,7 +127,7 @@ Page({
             }
             if (this.data.jump == "index") {
                 wx.switchTab({
-                    url: '../index/index',
+                    url: '../home/home',
                 })
             } else {
                 wx.redirectTo({

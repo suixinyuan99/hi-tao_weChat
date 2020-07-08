@@ -4,6 +4,8 @@
 .username{
 	text-align: center;
 	color: #E34A07;
+	margin-top: 50rpx;
+	font-size: 30rpx;
 }
 .headImage{
 	width: 100rpx;
@@ -12,18 +14,20 @@
 	border-radius: 50%;
 }
 .container .img{
+	
 	width: 60%;
 	height: 300rpx;
-	border: 1px solid #999;
+	border: 1px solid #E34A07;
 	position: relative;
-	margin-top: 30rpx;
-	background: #E34A07;
+	margin-top: 120rpx;
+	background: #FBF9F8;
 	text-align: center;
 	line-height: 300rpx;
 }
 .iconfont {
-	font-size: 80px;
-	color: white;
+	font-size: 80rpx;
+	font-weight: 900;
+	color: #E34A07;
 }
 .img image{
 	width: 100%;
@@ -43,13 +47,16 @@
 	/*width: 100%;*/
 	/*height: 100%;*/
 /*}*/
-.container text{
-	margin-top: 50rpx;
-	font-size: 30rpx;
-}
 button{
 	margin-top: 50rpx;
 }
 .img{
 	border-radius: 20rpx;
+}
+
+.text1{
+color:#A3A3A3;
+margin-top: 20rpx;
+font-size: 26rpx;
+font-family: PingFangSC-regular;
 }

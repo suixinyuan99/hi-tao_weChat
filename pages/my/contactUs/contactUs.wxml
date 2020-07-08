@@ -1,34 +1,35 @@
 <view class="list">
-	   <view class="left">
-	       官方公众号
-	   </view>
-	   <view class="right">
-	       西电青苔工作室
-	   </view>
+	<view class="left">
+		官方公众号
+	</view>
+	<view class="right">
+		西电青苔工作室
+	</view>
 </view>
 <view class="list">
-	   <view class="left">
-	       小T微信
-	   </view>
-	   <view class="right">
-	       QTworkshop
-	   </view>
-	   <view class="copy" hover-class="copyhover" bindtap='copy'>
-	   复制	
-	   </view>
+	<view class="left">
+		小T微信
+	</view>
+	<view class="right">
+		QTworkshop
+	</view>
+	<view class="copy" hover-class="copyhover" bindtap='copy'>
+		复制
+	</view>
 </view>
 <view class="list">
-	   <view class="left">
-	       官方邮箱
-	   </view>
-	   <view class="right">
-	       campus@qing-tai.club
-	   </view>
+	<view class="left">
+		官方邮箱
+	</view>
+	<view class="right">
+		campus@qing-tai.club
+	</view>
 </view>
 <view class="list img" bindtap="previewImage">
 	<image src="../../../images/erweima.jpg"></image>
 </view>
 <view class="list introduce">
 	<text class="titleIntroduce">Hi，西电er你们好，感谢你们看到了这段文字～</text>
-	这里是西电青苔工作室，一个学生自发成立的非盈利团队。「西电hi淘」是我们2018年的第二款产品，大家要是遇到认证问题、交易问题等都可以通过我们的公众号或者我们的客服小T联系我们哦～
+	这里是西电青苔工作室，一个学生自发成立的非盈利性团队。「西电hi淘」是我们团队于18年年底开发的二手交易小程序，小程序还在不断完善中，你们要是遇到任何问题都请联系我们，可以通过公众号后台、小T。
+	感谢大家的真诚反馈，我们一定做到更好！
 </view>

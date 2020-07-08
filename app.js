@@ -62,7 +62,13 @@ App({
                         //获取openid
                         this.request(api.getOpenid, {
                             code: res_login.code,
-                        }, "GET", this.getOpenidSuccess)
+                        }, "POST", this.getOpenidSuccess)
+                    },
+                    fail:res => {
+                        this.request(api.getOpenid, {
+                            code: res_login.code,
+                        }, "POST", this.getOnlyOpenidSuccess)
+                        
                     }
                 })
             }
@@ -82,10 +88,24 @@ App({
             this.globalData.session_key = res.data.session_key;
             //将用户的信息存入数据库
             this.request(api.login, {
-                openid: this.globalData.openId,
+                userOpenid: this.globalData.openId,
                 userName: this.globalData.userInfo.nickName,
-                userAvatarUrl: this.globalData.userInfo.avatarUrl
+                userAvartar: this.globalData.userInfo.avatarUrl
             }, "POST", this.getLoginSuccess)
+        }
+    },
+    getOnlyOpenidSuccess: function (res) {
+        console.log("获取openid");
+        console.log(res);
+        if(res.statusCode==404){
+            wx.showModal({
+                title: '提示',
+                content: '服务器开小差了～请退出微信后再试',
+            })
+            console.log(404)
+        }else{
+            this.globalData.openId = res.data.openid;
+            this.globalData.session_key = res.data.session_key;
         }
     },
     getLoginSuccess: function (res) {
@@ -97,7 +117,8 @@ App({
                 content: '服务器开小差了～请退出微信后再试',
             })
         }else{
-            if(res.data.object.userState==0){
+            this.globalData.userShouquan=true
+            if(res.data.result.userState==1){
                 console.log("该用户已认证");
                 this.globalData.userState=0;
             }else{
@@ -129,6 +150,8 @@ App({
         userInfo: null,
         openId: null,
         session_key: null,
-        userState: null
+        userState: 1,
+        userShouquan:false,
+        needRefresh:false,
     }
 })

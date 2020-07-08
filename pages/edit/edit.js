@@ -1,16 +1,12 @@
 var app = getApp();
 var api = require('../../utils/api');
-var API_SELL_URL = api.getSellProductDetail,
-    API_BUY_URL = api.getBuyProductDetail,
-    API_EDIT_SELL = api.editSellProduct,
-    API_EDIT_BUY = api.editBuyProduct;
-var API_GET = '',
-    API_EDIT = '';
+var API_GET = api.getGoodDetail;
+var API_EDIT = api.editGood;
 Page({
     data: {
         data: {
             area: ["南校区", "北校区", "不限校区"],
-            showImage:true,
+            showImage: true,
             areaIndex: 0,
             type: ['数码电子', '书籍资料', '日用百货', '美妆护肤', '吃喝分享', '鞋衣配饰', '卡票出让', '其他'],
             typeIndex: 0,
@@ -38,85 +34,84 @@ Page({
             contactValue1: "",
             tips: '(必填) 上传照片会增大您的成功几率哦！(最多6张)'
         },
-        goodId: 0,
-        goodProperty: 0
+        goodID: 0,
+        goodProperty: 0,
+        isEdit:true
     },
     onLoad: function (params) {
         console.log(params)
         this.setData({
-            goodId: params.goodId,
-            goodProperty: params.goodProperty
+            goodID: params.goodID,
+            goodProperty: params.goodType //
         })
-        if (params.goodProperty == '0') {
-            API_GET = API_SELL_URL;
-            API_EDIT=API_EDIT_SELL;
-        } else {
-            API_GET = API_BUY_URL
-            API_EDIT=API_EDIT_BUY;
-        }
         wx.showToast({
             title: "加载中...",
             icon: "loading"
         })
-        app.request(API_GET, {goodId: params.goodId}, 'GET', this.getDetailSuccess);
+        app.request(API_GET, {
+            goodID: params.goodID,
+            goodType: params.goodType,
+            openid: app.globalData.openId
+        }, 'GET', this.getDetailSuccess);
     },
     getDetailSuccess: function (res) {
         console.log(res)
-        var data = res.data;
+        var data = res.data.result;
+        console.log(data)
         this.change('title', data.goodTitle);
         this.change('introduce', data.goodDesc);
-        this.change('images', data.imageUrl);
-        if (data.goodPlace == '南校区') {
+        this.change('images', data.imageList);
+        if (data.goodCampus == '南校区') {
 
-        } else if (data.goodPlace == '北校区') {
+        } else if (data.goodCampus == '北校区') {
             this.change('areaIndex', 1);
         } else {
             this.change('areaIndex', 2);
         }
         this.change('money', data.goodPrice);
-        if (data.goodType == '数码电子') {
+        if (data.goodCatagoty == '数码电子') {
 
-        } else if (data.goodType == '书籍资料') {
+        } else if (data.goodCatagoty == '书籍资料') {
             this.change('typeIndex', 1);
-        } else if (data.goodType == '日用百货') {
+        } else if (data.goodCatagoty == '日用百货') {
             this.change('typeIndex', 2);
-        } else if (data.goodType == '美妆护肤') {
+        } else if (data.goodCatagoty == '美妆护肤') {
             this.change('typeIndex', 3);
-        } else if (data.goodType == '吃喝分享') {
+        } else if (data.goodCatagoty == '吃喝分享') {
             this.change('typeIndex', 4);
-        } else if (data.goodType == '鞋衣配饰') {
+        } else if (data.goodCatagoty == '鞋衣配饰') {
             this.change('typeIndex', 5);
-        } else if (data.goodType == '卡票出让') {
+        } else if (data.goodCatagoty == '卡票出让') {
             this.change('typeIndex', 6);
         } else {
             this.change('typeIndex', 7);
         }
-        if (data.goodTel != '') {
+        if (data.goodTel != '' && data.goodTel != "null" &&data.goodTel != null) {
             this.change('contactValue1', data.goodTel);
-            if (data.goodWx != '') {
-                this.change('contactValue2', data.goodWx);
+            if (data.goodWX != '' &&data.goodWX != 'null' && data.goodWX != null) {
+                this.change('contactValue2', data.goodWX);
                 this.add();
-                if (data.goodQq != '') {
-                    this.change('contactValue3', data.goodQq);
+                if (data.goodQQ != '' &&data.goodQQ != 'null' &&data.goodQQ != null) {
+                    this.change('contactValue3', data.goodQQ);
                     this.add1();
                 }
             } else {
-                if (data.goodQq != '') {
-                    this.change('contactValue2', data.goodQq);
+                if (data.goodQQ != '' &&data.goodQQ != 'null' &&data.goodQQ != null) {
+                    this.change('contactValue2', data.goodQQ);
                     this.change('contact2Index', 1);
                     this.add();
                 }
             }
-        } else if (data.goodWx != '') {
-            this.change('contactValue1', data.goodWx);
+        } else if (data.goodWX != '' &&data.goodWX != 'null' &&data.goodWX != null) {
+            this.change('contactValue1', data.goodWX);
             this.change('contactIndex', 1);
-            if (data.goodQq != '') {
-                this.change('contactValue2', data.goodQq);
+            if (data.goodQQ != '' && data.goodQQ != 'null' && data.goodQQ != null) {
+                this.change('contactValue2', data.goodQQ);
                 this.change('contact2Index', 1);
                 this.add();
             }
         } else {
-            this.change('contactValue1', data.goodQq);
+            this.change('contactValue1', data.goodQQ);
             this.change('contactIndex', 2);
         }
         wx.hideToast();
@@ -159,13 +154,85 @@ Page({
         this.change("showContact3", true)
         this.change('contact3', contact3)
     },
+    delate1: function () {
+        if(this.data.data.showContact3!=true){
+            var tep = this.data.data.contact2[this.data.data.contact2Index];
+            var origin =['手机号', '微信', 'QQ'];
+            var index =this.data.data.contact.indexOf(tep)
+            var value=this.data.data.contactValue2
+            this.change("contactIndex",index)
+            this.change("contactValue1",value)
+            this.change('contact2', origin)
+            this.change("contact2Index",0)
+            this.change("contactValue2","")
+            this.change("showContact2", false)
+            // console.log("delate1")
+            // console.log("c1")
+            // console.log(this.data.data.contact)
+            // console.log(this.data.data.contactIndex)
+            // console.log("c2")
+            // console.log(this.data.data.contact2)
+            // console.log(this.data.data.contact2Index)
+        }else{
+            var origin =['手机号', '微信', 'QQ'];
+            var c1item=this.data.data.contact2[this.data.data.contact2Index]
+            var c1index=this.data.data.contact.indexOf(c1item)
+            var c1v=this.data.data.contactValue2
+
+            var c2item=this.data.data.contact3[this.data.data.contact3Index]
+            origin.splice(c1index, 1);
+            var c2=origin
+            var c2index=c2.indexOf(c2item)
+            var c2v=this.data.data.contactValue3
+
+            this.change("contactIndex",c1index)
+            this.change("contactValue1",c1v)
+            this.change('contact2', c2)
+            this.change("contact2Index",c2index)
+            this.change("contactValue2",c2v)
+            this.change('contact3', ['手机号', '微信', 'QQ'])
+            this.change("contact3Index",0)
+            this.change("contactValue3","")
+            this.change("showContact3", false)
+
+            // console.log("delate2")
+            // console.log("c1")
+            // console.log(this.data.data.contact)
+            // console.log(this.data.data.contactIndex)
+            // console.log("c2")
+            // console.log(this.data.data.contact2)
+            // console.log(c2)
+            // console.log(this.data.data.contact2Index)
+
+        }
+    },
+    delate2:function () {
+
+        var origin =['手机号', '微信', 'QQ'];
+        var c1item=this.data.data.contact[this.data.data.contactIndex]
+        var c1index=this.data.data.contact.indexOf(c1item)
+
+        var c2item=this.data.data.contact3[this.data.data.contact3Index]
+        origin.splice(c1index, 1);
+        var c2=origin
+        var c2index=c2.indexOf(c2item)
+        var c2v=this.data.data.contactValue3
+
+        this.change('contact2', c2)
+        this.change("contact2Index",c2index)
+        this.change("contactValue2",c2v)
+        this.change('contact3', ['手机号', '微信', 'QQ'])
+        this.change("contact3Index",0)
+        this.change("contactValue3","")
+        this.change("showContact3", false)
+        
+    },
     title: function (e) {
         if (e.detail.value == "") {
             wx.showModal({
                 title: '提示',
                 content: '商品标题不能为空',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
         } else {
             this.change('title', e.detail.value)
@@ -176,8 +243,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '联系方式至少填一个哦',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
         } else {
             this.change('contactValue1', e.detail.value)
@@ -194,8 +260,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '详情描述不能为空',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
         } else {
             this.change('introduce', e.detail.value)
@@ -207,39 +272,35 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '意向价格请填写两位小数哦～',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
-        }else{
+        } else {
             this.change('money', e.detail.value)
         }
     },
     submitTap: function (e) {
         var _this = this;
-        if(this.data.data.areaIndex==-1){
+        if (this.data.data.areaIndex == -1) {
             wx.showModal({
                 title: '提示',
                 content: '请选择校区',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
-        if(this.data.data.typeIndex==-1){
+        if (this.data.data.typeIndex == -1) {
             wx.showModal({
                 title: '提示',
                 content: '请选择分类',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
-        if (e.detail.value.title.length > 20) {
+        if (e.detail.value.title.length > 30) {
             wx.showModal({
                 title: '提示',
                 content: '商品标题不能超过20个字哦～',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
@@ -247,8 +308,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '商品标题不能为空',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
@@ -256,8 +316,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '详情描述不能为空',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
@@ -266,8 +325,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '意向价格请填写两位小数哦～',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
@@ -275,8 +333,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '意向价格不能为空',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
@@ -291,8 +348,7 @@ Page({
                 wx.showModal({
                     title: '提示',
                     content: '请输入正确的手机号哦~',
-                    success: function (res) {
-                    }
+                    success: function (res) {}
                 })
                 return;
             }
@@ -320,8 +376,7 @@ Page({
                 wx.showModal({
                     title: '提示',
                     content: '请输入正确的QQ号哦~',
-                    success: function (res) {
-                    }
+                    success: function (res) {}
                 })
                 return;
             }
@@ -339,8 +394,7 @@ Page({
                     wx.showModal({
                         title: '提示',
                         content: '请输入正确的手机号哦~',
-                        success: function (res) {
-                        }
+                        success: function (res) {}
                     })
                     return;
                 }
@@ -366,8 +420,7 @@ Page({
                     wx.showModal({
                         title: '提示',
                         content: '请输入正确的QQ号哦~',
-                        success: function (res) {
-                        }
+                        success: function (res) {}
                     })
                     return;
                 }
@@ -385,8 +438,7 @@ Page({
                         wx.showModal({
                             title: '提示',
                             content: '请输入正确的手机号哦~',
-                            success: function (res) {
-                            }
+                            success: function (res) {}
                         })
                         return;
                     }
@@ -412,8 +464,7 @@ Page({
                         wx.showModal({
                             title: '提示',
                             content: '请输入正确的QQ号哦~',
-                            success: function (res) {
-                            }
+                            success: function (res) {}
                         })
                         return;
                     }
@@ -424,8 +475,7 @@ Page({
             wx.showModal({
                 title: '提示',
                 content: '请阅读并同意《免责声明》',
-                success: function (res) {
-                }
+                success: function (res) {}
             })
             return;
         }
@@ -435,15 +485,17 @@ Page({
         var userAvatarUrl = app.globalData.userInfo.avatarUrl;
         var userName = app.globalData.userInfo.nickName;
         var datas = {
-            goodType: this.data.data.type[typeIndex],
-            goodId:this.data.goodId,
+            goodType: this.data.goodProperty,
+            goodID: this.data.goodID,
             goodTitle: e.detail.value.title,
             goodDesc: e.detail.value.introduce,
-            goodPlace: this.data.data.area[areaIndex],
-            goodWx: this.data.data.weixin,
+            goodCampus: this.data.data.area[areaIndex],
+            goodWX: this.data.data.weixin,
             goodTel: this.data.data.telephone,
-            goodQq: this.data.data.QQ,
+            goodQQ: this.data.data.QQ,
             goodPrice: e.detail.value.money,
+            goodCatagory: this.data.data.type[typeIndex],
+            openid: openId,
         }
         console.log(this.data.data.loading)
         if (!this.data.data.loading) {
@@ -459,26 +511,22 @@ Page({
             })
         }
     },
-    EditProductSuccess:function(res){
+    EditProductSuccess: function (res) {
         console.log(res);
-        if(res.data.code==1600){
+        if (res.data.msg == "success") {
             wx.showToast({
-                title:"编辑成功",
-                icon:"success"
+                title: "编辑成功",
+                icon: "success"
             })
-            if(this.data.goodProperty=='0'){
-                wx.redirectTo({
-                    url: '../detailIndex/detailIndex?goodId=' + this.data.goodId + '&goodProperty=0',
-                })
-            }else{
-                wx.redirectTo({
-                    url: '../detailIndex/detailIndex?goodId=' + this.data.goodId + '&goodProperty=1',
-                })
-            }
-        }else{
+
+            wx.redirectTo({
+                url: '../detailIndex/detailIndex?goodID=' + this.data.goodID + '&goodType=' + this.data.goodProperty,
+            })
+
+        } else {
             wx.showToast({
-                title:"编辑失败",
-                icon:"none"
+                title: "编辑失败",
+                icon: "none"
             })
         }
     },

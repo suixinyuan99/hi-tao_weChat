@@ -1,0 +1,74 @@
+<view>
+
+	<view class="searchBarBox">
+		<view class="search_arr">
+			<icon class="searchIcon" size='48rpx' type='search'>
+			</icon>
+			<input placeholder="{{searchValue}}" value="{{searchValue}}" bindconfirm="searchConfirm" />
+		</view>
+	</view>
+
+	<view class="chooseBar">
+		<view class="chooseBox">
+			<picker bindchange="priceChange" value="{{prcieIndex}}" range="{{priceShow}}">
+				<view class="data">{{priceShow[priceIndex]}}
+					<image src="../../../images/down.png" class="down" />
+				</view>
+			</picker>
+		</view>
+		<view class="chooseBox">
+			<picker bindchange="campusChange" value="{{campusIndex}}" range="{{campusShow}}">
+				<view class="data">{{campusShow[campusIndex]}}
+					<image src="../../../images/down.png" class="down" />
+				</view>
+			</picker>
+		</view>
+	</view>
+
+	<view class="showBox">
+		<scroll-view scroll-y="true" style="height:{{winHeight -100}}px">
+			<view wx:if="{{list.length==0}}" class="noData">
+				<icon class="iconfont icon-wutupianyemian"></icon>
+				<view>没有搜索到商品，换一个关键词试试吧！</view>
+			</view>
+			<view wx:if="{{top}}" class="tips">
+				<text>下拉刷新</text>
+			</view>
+			<block wx:for="{{ list }}" wx:key="{{index}}">
+				<navigator url="../../detailIndex/detailIndex?goodID={{item.goodID}}&goodType={{item.goodType}}" class='info-item'>
+					<view wx:if="{{item.goodTradeState==1}}" class='mask'>
+						<image style="" mode="" src="../../../images/done.png"></image>
+					</view>
+					<view class='leftSide'>
+						<view class='showPicture'>
+							<image style="" mode="scaleToFill" src="{{item.firstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+							<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../../images/noImg.png"></image>
+							<view class='tag'>#{{item.goodCatagory}}</view>
+						</view>
+					</view>
+
+					<view class='rightSide'>
+						<view class='title'>
+							<text>{{ item.goodTitle }}</text>
+						</view>
+
+						<view class='priceAndWatch'>
+							<text class='price'> ￥{{ item.goodPrice }}</text>
+							<text class='watch'> {{ item.goodClick }}人|浏览</text>
+						</view>
+
+
+						<view class='timeCollect clearfix'>
+							<view class='date'>{{ item.goodDate }}</view>
+						</view>
+					</view>
+				</navigator>
+
+			</block>
+		</scroll-view>
+	</view>
+
+
+
+
+</view>

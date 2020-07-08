@@ -1,0 +1,43 @@
+<view>
+
+	<scroll-view scroll-y="true" style="height:{{winHeight}}px" class="scrollBox">
+		<view wx:if="{{list.length==0}}" class="noData">
+			<icon class="iconfont icon-wutupianyemian"></icon>
+			<view>你还没有卖出商品喔！</view>
+		</view>
+		<view wx:if="{{list.length!=0}}" class="moneyBox">
+		哇！你已经通过Hi淘赚了{{money}}元哦！ 
+		</view>
+
+
+		<block wx:for="{{ list }}" wx:key="{{index}}">
+			<view class="showBlock">
+				<view class='info-item'>
+					<view class='leftSide'>
+						<view class='showPicture'>
+							<image style="" mode="scaleToFill" src="{{item.sgFirstImgUrl}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+							<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../../images/noImg.png"></image>
+							<view class='tag'>{{item.sgCatagory}}</view>
+						</view>
+					</view>
+
+					<view class='rightSide'>
+						<view class='title'>
+							<text>{{ item.sgTitle }}</text>
+						</view>
+						<view class='money'>
+							<text>收款金额 ￥{{ item.sgPrice }}</text>
+						</view>
+						<view class='title'>
+							<text>交易时间  {{ item.sgFinishDate }}</text>
+						</view>
+
+					</view>
+				</view>
+			</view>
+		</block>
+	</scroll-view>
+
+
+
+</view>

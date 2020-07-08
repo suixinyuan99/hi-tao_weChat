@@ -1,39 +1,22 @@
-/*
-* @Author: Jackhzh
-* @Date:   2018-11-05 21:08:13
-* @Last Modified by:   Jackhzh
-* @Last Modified time: 2019-04-11 14:16:26
-*/
 var imageUtil = require('../../utils/util.js');
 var app = getApp();
 var api = require('../../utils/api');
-var API_SELL_URL = api.getSellProductDetail,
-    API_BUY_URL = api.getBuyProductDetail,
-    API_IS_SELL_COLLECT = api.isCollectionSellProduct,
-    API_IS_BUY_COLLECT = api.isCollectionBuyProduct,
-    API_SELL_Collect = api.collectionSellProduct,
-    API_BUY_Collect = api.collectionBuyProduct,
-    API_SELL_GetComment = api.getSellProductAllComments,
-    API_BUY_GetComment = api.getBuyProductAllComments,
-    API_SELL_Comment = api.commentSellProduct,
-    API_BUY_Comment = api.commentBuyProduct,
-    API_SELL_CLICK=api.plusSellGoodClick,
-    API_BUY_CLICK=api.plusBuyGoodClick,
-    API_CANCEL_Collect = api.cancelCollection,
-    API_END_PRODUCT = api.finishProduct;
-var API_URL = '',
-    API_Collect = '',
-    API_GetComment = '',
-    API_Comment = '',
-    API_IS_COLLECT = '',
-    API_CLICK='';
+7
+var API_URL = api.getGoodDetail,
+    API_USER = api.getUserInfo,
+    API_Collect = api.changeCollectState,
+    API_GetComment = api.getGoodComment,
+    API_Comment = api.addComment;
+  var  API_Follow=api.followUser;
+
+
 Page({
     data: {
         // banner
         indicatorDots: true, //是否显示面板指示点
         autoplay: true, //是否自动切换
         duration: 1000, //  滑动动画时长1s
-        imageList: [],//图片列表
+        imageList: [], //图片列表
         detailList: {},
         showBottom: true,
         comment: false,
@@ -44,10 +27,12 @@ Page({
         commentId: 0,
         isShouquan: false,
         scIcon: true,
-        commentValue:"",
-        publishUserName:"",
-        publishHeadUrl:"",
-        publishOpenId:""
+        commentValue: "",
+        publishUserName: "",
+        publishHeadUrl: "",
+        publishOpenId: "",
+        level:0,
+        userState:false
     },
 
     onLoad: function (params) {
@@ -61,48 +46,34 @@ Page({
                 console.log('加载超时');
             }
         })
+        if(app.globalData.userState==0){
+            this.setData({
+                userState:true
+            })
+        }
         console.log(params);
-        if (!params.shouquan) {
-            console.log("false" + params.shouquan)
-        } else {
-            console.log("true" + params.shouquan)
+        if (app.globalData.userState == 0) {} else {
             this.setData({
                 isShouquan: true
             })
         }
         this.setData({
-            goodProperty: params.goodProperty,
-            goodId: params.goodId
+            goodType: params.goodType,
+            goodID: params.goodID
         })
-        console.log(this.data.goodProperty);
-        initAPI();
-
-        function initAPI() {
-            if (params.goodProperty == 0) {
-                API_URL = API_SELL_URL;
-                API_Collect = API_SELL_Collect;
-                API_GetComment = API_SELL_GetComment;
-                API_IS_COLLECT = API_IS_SELL_COLLECT;
-                API_Comment = API_SELL_Comment;
-                API_CLICK=API_SELL_CLICK;
-            } else if (params.goodProperty == 1) {
-                API_URL = API_BUY_URL;
-                API_Collect = API_BUY_Collect;
-                API_GetComment = API_BUY_GetComment;
-                API_IS_COLLECT = API_IS_BUY_COLLECT;
-                API_Comment = API_BUY_Comment;
-                API_CLICK=API_BUY_CLICK;
-            }
-        }
-
         var that = this;
         //调用获取详情和评论API
-        app.request(API_URL, {goodId: params.goodId}, 'GET', this.getDetailSuccess);
-        app.request(API_GetComment, {goodid: params.goodId}, 'GET', this.getCommentSuccess);
-        app.request(API_IS_COLLECT, {
-            goodId: params.goodId,
+        app.request(API_URL, {
+            goodID: params.goodID,
+            goodType: params.goodType,
             openid: app.globalData.openId
-        }, 'GET', this.getIsCollectSuccess);
+        }, 'GET', this.getDetailSuccess);
+
+        app.request(API_GetComment, {
+            goodID: params.goodID,
+            goodType:params.goodType
+        }, 'GET', this.getCommentSuccess);
+
         if (app.globalData.userState !== 0) {
             that.setData({
                 noState: true
@@ -110,77 +81,91 @@ Page({
         }
     },
     getDetailSuccess: function (res) {
-        console.log(res);
-        var data = res.data;
+        var data = res.data.result;
         console.log(data)
         var imageList = [];
-        if (data.imageUrl == null||data.imageUrl.length==0) {
+        if (data.imgList == null || data.imgList.length == 0) {
             data.showImg = false;
         } else {
             data.showImg = true;
         }
         //判断是否是发布者进入详情
-        var openId = app.globalData.openId;
-        if (data.openid == openId) {
+        if (data.isMyGood == 1) {
             data.isMe = true;
         } else {
             data.isMe = false;
         }
+        // 判断是否收藏
+        if (data.isCollect == 0) {
+            console.log('没有收藏')
+        } else {
+            console.log('已收藏')
+            this.setData({
+                scIcon: false
+            })
+        }
+        if (data.isFollow == 0) {
+            console.log('没有关注')
+            data.isFollow=false
+        } else {
+            data.isFollow=true
+        }
+
+        // 获取用户资料
+
+        app.request(API_USER, {
+            openid: data.openid
+        }, 'GET', this.getUserSuccess);
+
+        // 设置QQ等联系消息的显示
+        if(data.goodQQ == null || data.goodQQ==""){
+            data.showQQ=false
+        }else{
+            data.showQQ=true
+        }
+        if(data.goodWX == null || data.goodWX==""){
+            data.showWX=false
+        }else{
+            data.showWX=true
+        }
+        if(data.goodTel == null || data.goodTel==""){
+            data.showTel=false
+        }else{
+            data.showTel=true
+        }
+
+
         this.setData({
             detailList: data,
             imageList: imageList,
-            publishUserName:data.user.userName,
-            publishHeadUrl:data.user.userAvatarUrl,
-            publishOpenId:data.openid
+            publishOpenId: data.openid
         });
-        app.request(API_CLICK,{
-            clickRate:data.clickRate,
-            goodId:this.data.goodId
-        },'GET',this.clickSuccess)
         wx.hideToast();
+    },
+    getUserSuccess:function (res) {
+        var data=res.data.result
+        this.setData({
+            publishUserName: data.userName,
+            publishHeadUrl: data.userAvartar,
+        })
     },
     getCommentSuccess: function (res) {
         console.log(res);
-        if(res.status==404){
+        if (res.status == 404) {
             wx.showModal({
                 title: '提示',
                 content: '服务器开小差了～留言可能未显示，请稍后再试',
             })
-        }else{
-            var commentShow = res.data;
-            if(commentShow){
+        } else {
+            var commentShow = res.data.result;
+            if (commentShow) {
                 this.setData({
                     commentShow: commentShow
                 })
             }
         }
     },
-    getIsCollectSuccess: function (res) {
-        console.log(res);
-        if(this.data.goodProperty=="0"){
-            if (res.data.code == 1040) {
-                console.log('没有收藏')
-            } else {
-                console.log('已收藏')
-                this.setData({
-                    scIcon: false
-                })
-            }
-        }else{
-            if (res.data.code == 1500) {
-                console.log('没有收藏')
-            } else {
-                console.log('已收藏')
-                this.setData({
-                    scIcon: false
-                })
-            }
-        }
-
-    },
-    clickSuccess:function(res){
-        console.log(res)
-    },
+    
     //跳转详情页
     shouquan: function () {
         wx.switchTab({
@@ -188,14 +173,14 @@ Page({
         })
     },
     imgShow: function (event) {
-        var src = event.currentTarget.dataset.src;//获取data-src
+        var src = event.currentTarget.dataset.src; //获取data-src
         var that = this;
         //图片预览
         console.log(src);
         console.log(this.data.imageList);
         wx.previewImage({
             current: src, // 当前显示图片的http链接
-            urls: that.data.imageList // 需要预览的图片http链接列表
+            urls: that.data.detailList.imgList // 需要预览的图片http链接列表
         })
     },
     //结贴
@@ -206,12 +191,11 @@ Page({
             content: '确定完成并关闭交易吗？',
             success(res) {
                 if (res.confirm) {
-                    var goodId = that.data.goodId;
-                    app.request(API_END_PRODUCT, {
+                    app.request(api.finishProduct, {
                         openid: app.globalData.openId,
-                        goodId: goodId,
-                        type: that.data.goodProperty
-                    }, 'GET', that.endProductSuccess)
+                        goodID: that.data.goodID,
+                        goodType: that.data.goodType
+                    }, 'POST', that.endProductSuccess)
                 } else if (res.cancel) {
                     return
                 }
@@ -220,19 +204,23 @@ Page({
     },
     endProductSuccess: function (res) {
         console.log(res);
-        if (res.data.code == 1080) {
+        if (res.data.msg == "success") {
             wx.showToast({
                 title: '交易成功！',
                 icon: 'success',
                 duration: 2000
             })
+            wx.reLaunch({
+                url: '../home/home'
+              })
+
         } else {
             wx.showToast({
-                title: res.data.message,
-                icon: 'success',
+                title: "交易失败，请稍候再试吧！",
                 duration: 2000
             })
         }
+
     },
     onReady: function () {
         wx.setNavigationBarTitle({
@@ -240,7 +228,47 @@ Page({
         })
     },
     onCollect: function () {
-        app.request(API_Collect, {goodId: this.data.goodId, openid: app.globalData.openId}, 'GET', this.collectSuccess);
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        if (app.globalData.userState!=0) {
+            wx.showModal({
+                title: '提示',
+                content: '进行认证才能操作哦',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../my/myIdentification/myIdentification',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        app.request(API_Collect, {
+            goodID: this.data.goodID,
+            openid: app.globalData.openId,
+            goodType:this.data.goodType
+        }, 'POST', this.collectSuccess);
         wx.showToast({
             title: '加载中...',
             icon: 'loading',
@@ -251,41 +279,63 @@ Page({
     collectSuccess: function (res) {
         console.log(res);
         wx.hideToast();
-        if(this.data.goodProperty=='0'){
-            if (res.data.code == 1030) {
+       if (res.data.msg =="collect success") {
+            
                 console.log('收藏成功');
                 this.setData({
                     scIcon: false
                 })
-            } else {
+              
+            
+        } else {
                 wx.showToast({
                     title: "操作失败",
                     icon: "none",
                     duration: 2000
                 })
-            }
-        }else{
-            if (res.data.code == 1400) {
-                console.log('收藏成功');
-                this.setData({
-                    scIcon: false
-                })
-            } else {
-                wx.showToast({
-                    title: "操作失败",
-                    icon: "none",
-                    duration: 2000
-                })
-            }
-        }
-
-    },
+    }},
     cancelCollect: function () {
-        app.request(API_CANCEL_Collect, {
-            goodId: this.data.goodId,
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        if (app.globalData.userState!=0) {
+            wx.showModal({
+                title: '提示',
+                content: '进行认证才能操作哦',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../my/myIdentification/myIdentification',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        app.request(API_Collect, {
+            goodID: this.data.goodID,
             openid: app.globalData.openId,
-            type: this.data.goodProperty
-        }, 'GET', this.cancelCollectSuccess);
+            goodType:this.data.goodType
+        }, 'POST', this.cancelCollectSuccess);
         wx.showToast({
             title: '加载中...',
             icon: 'loading',
@@ -296,7 +346,7 @@ Page({
     cancelCollectSuccess: function (res) {
         console.log(res);
         wx.hideToast();
-        if (res.data.code == 1070) {
+        if (res.data.msg == "unCollect success") {
             console.log('取消收藏')
             this.setData({
                 scIcon: true
@@ -307,9 +357,165 @@ Page({
                 icon: "none",
                 duration: 2000
             })
-        }
+        }        
+
     },
+    follow: function () {
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        if (app.globalData.userState!=0) {
+            wx.showModal({
+                title: '提示',
+                content: '进行认证才能操作哦',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../my/myIdentification/myIdentification',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        app.request(API_Follow, {
+            openid: app.globalData.openId,
+            followedOpenid:this.data.detailList.openid
+        }, 'POST', this.followSuccess);
+        wx.showToast({
+            title: '加载中...',
+            icon: 'loading',
+            mask: true,
+            duration: 10000,
+        })
+    },
+    followSuccess: function (res) {
+        console.log(res);
+        wx.hideToast();
+       if (res.data.msg == 'follow success') {
+           var data=this.data.detailList
+           data.isFollow=true
+            
+                console.log('收藏成功');
+                this.setData({
+                    detailList: data
+                })
+              
+            
+        } else {
+                wx.showToast({
+                    title: "操作失败",
+                    icon: "none",
+                    duration: 2000
+                })
+    }},
+    unfollow: function () {
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        if (app.globalData.userState!=0) {
+            wx.showModal({
+                title: '提示',
+                content: '进行认证才能操作哦',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../my/myIdentification/myIdentification',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        app.request(API_Follow, {
+            openid: app.globalData.openId,
+            followedOpenid:this.data.detailList.openid
+        }, 'POST', this.unfollowSuccess);
+        wx.showToast({
+            title: '加载中...',
+            icon: 'loading',
+            mask: true,
+            duration: 10000,
+        })
+    },
+    unfollowSuccess: function (res) {
+        console.log(res);
+        wx.hideToast();
+       if (res.data.msg == "unFollow success") {
+           var data=this.data.detailList
+           data.isFollow=false
+            
+                console.log('收藏成功');
+                this.setData({
+                    detailList: data
+                })
+              
+            
+        } else {
+                wx.showToast({
+                    title: "操作失败",
+                    icon: "none",
+                    duration: 2000
+                })
+    }},
     cantCopy: function () {
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
         wx.showModal({
             title: '提示',
             content: '只有经过一卡通认证的用户才能进行查看信息哦~',
@@ -326,7 +532,7 @@ Page({
     },
     copyWx: function () {
         let that = this;
-        let weixin = that.data.detailList.goodWx.trim();
+        let weixin = that.data.detailList.goodWX.trim();
         if (weixin === '') {
             wx.showToast({
                 title: '微信号为空！复制失败！',
@@ -349,7 +555,7 @@ Page({
     },
     copyQq: function () {
         let that = this;
-        let qq = that.data.detailList.goodQq !=null ? that.data.detailList.goodQq.trim() : "";
+        let qq = that.data.detailList.goodQQ != null ? that.data.detailList.goodQQ.trim() : "";
         if (qq === '') {
             wx.showToast({
                 title: 'qq为空！复制失败！',
@@ -392,12 +598,48 @@ Page({
             });
         }
     },
-    edit:function(e){
+    edit: function (e) {
         wx.navigateTo({
-            url:"../edit/edit?goodId="+this.data.goodId+"&goodProperty="+this.data.goodProperty
+            url: "../edit/edit?goodID=" + this.data.goodID + "&goodType=" + this.data.goodType
         })
     },
     onComment: function () {
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        if (app.globalData.userState!=0) {
+            wx.showModal({
+                title: '提示',
+                content: '进行认证才能操作哦',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../my/myIdentification/myIdentification',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
         this.setData({
             showBottom: false,
             comment: true
@@ -407,23 +649,66 @@ Page({
         this.setData({
             showBottom: true,
             comment: false,
-            commentId: 0
+            commentId: 0,
+            level:0,
+            commentUsername:""
         })
     },
     replyComment: function (e) {
+        console.log(e)
         var commentId = e.currentTarget.dataset.id;
         var commentUsername = e.currentTarget.dataset.username;
+        var level=e.currentTarget.dataset.level;
         this.setData({
             showBottom: false,
             comment: true,
             commentId: commentId,
-            commentUsername: commentUsername
+            commentUsername: commentUsername,
+            level:level
         })
     },
     submitForm(e) {
         var form = e.detail.value.comment;
         var that = this;
-        if (form.comment == "") {
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+
+        if (app.globalData.userState!=0) {
+            wx.showModal({
+                title: '提示',
+                content: '进行认证才能操作哦',
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../my/myIdentification/myIdentification',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        
+        if (form.comment == "" || form =="" ) {
             wx.showToast({
                 title: '请评论！',
                 icon: 'none',
@@ -431,80 +716,83 @@ Page({
             })
             return;
         }
-        if (this.data.commentId == 0) {
+        if (this.data.level == 0) {
             console.log('一级评论')
             var data = {
-                commentData:form,
-                sendAvatarurl:app.globalData.userInfo.avatarUrl,
-                sendUsername:app.globalData.userInfo.nickName,
-                sendOpenid:app.globalData.openId,
-                goodId: this.data.goodId,
-                recOpenid:this.data.publishOpenId,
-                recUsername:this.data.publishUserName,
-                recAvatarurl:this.data.publishHeadUrl,
-                commentType:1
+                openid:app.globalData.openId,
+                fatherID:this.data.goodID,
+                commentType:1,
+                comment: form,
+                goodType:this.data.goodType,
             }
-        }else{
+        } else if(this.data.level == 1) {
             console.log('二级评论')
             var data = {
-                commentData:form,
-                sendAvatarurl:app.globalData.userInfo.avatarUrl,
-                sendUsername:app.globalData.userInfo.nickName,
-                sendOpenid:app.globalData.openId,
-                goodId: this.data.goodId,
-                recOpenid:this.data.publishOpenId,
-                recUsername:this.data.publishUserName,
-                recAvatarurl:this.data.publishHeadUrl,
+                openid:app.globalData.openId,
+                fatherID:this.data.commentId,
                 commentType:2,
-                commentOneId:this.data.commentId
+                comment: form,
+            }
+        }else if(this.data.level == 2) {
+            console.log('三级评论')
+            var data = {
+                openid:app.globalData.openId,
+                fatherID:this.data.commentId,
+                commentType:3,
+                comment: form,
             }
         }
         console.log(data);
         wx.showToast({
-            title:"加载中...",
-            icon:"loading"
+            title: "加载中...",
+            icon: "loading"
         })
-        app.request(API_Comment,data,'POST',this.commentSuccess)
+        app.request(API_Comment, data, 'POST', this.commentSuccess)
     },
-    commentSuccess:function(res){
+    commentSuccess: function (res) {
         console.log(res);
         wx.hideToast();
-        if(this.data.goodProperty=='0'){
-            if(res.data.code==1050){
+            if (res.data.msg == "addcomment success") {
                 wx.showToast({
-                    title:"留言成功",
-                    icon:"success"
+                    title: "留言成功",
+                    icon: "success"
                 })
                 this.setData({
-                    commentValue:""
+                    commentValue: ""
                 })
-                app.request(API_GetComment, {goodid: this.data.goodId}, 'GET', this.getCommentSuccess);
-            }else{
+                app.request(API_GetComment, {
+                    goodID: this.data.goodID,
+                    goodType:this.data.goodType
+                }, 'GET', this.getCommentSuccess);
+            } else {
                 wx.showToast({
-                    title:"留言失败",
-                    icon:"none"
+                    title: "留言失败",
+                    icon: "none"
                 })
             }
-        }else{
-            if(res.data.code==1060){
-                wx.showToast({
-                    title:"留言成功",
-                    icon:"success"
-                })
-                this.setData({
-                    commentValue:""
-                })
-                app.request(API_GetComment, {goodid: this.data.goodId}, 'GET', this.getCommentSuccess);
-            }else{
-                wx.showToast({
-                    title:"留言失败",
-                    icon:"none"
-                })
-            }
-        }
+    
 
     },
     cantPersonal: function () {
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能操作哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
         wx.showModal({
             title: '提示',
             content: '只有经过一卡通认证的用户才能进行私信哦~',
@@ -522,10 +810,10 @@ Page({
     onShareAppMessage: function () {
         return {
             title: '能买能卖能say hi！',
-            path: '/pages/shouquan/shouquan?goodId=' + this.data.goodId+'&goodProperty='+this.data.goodProperty,
+            path: '/pages/shouquan/shouquan?goodId=' + this.data.goodId + '&goodProperty=' + this.data.goodProperty,
             success: (res) => {
                 console.log("转发成功", res);
             }
         }
     }
-})		
+})

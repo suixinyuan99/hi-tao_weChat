@@ -1,0 +1,32 @@
+<scroll-view scroll-y="true" style="height:{{winHeight}}px" class="showBox">
+
+
+	<view wx:if="{{list.length==0}}" class="noData">
+		<icon class="iconfont icon-wutupianyemian"></icon>
+		<view>还没有关注的用户喔！</view>
+	</view>
+	<view wx:for="{{list}}" wx:key="{{index}}" class="userBox" bindtap="goAllIssue" data-src="{{item.userOpenid}}">
+		<view class="leftSide">
+			<view class="leftPicture">
+				<image style="" mode="scaleToFill" src="{{item.userAvartar}}" binderror="" bindload="" wx:if="{{item.showImg}}"></image>
+				<image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../../images/noImg.png"></image>
+			</view>
+		</view>
+		<view class="rightSide">
+			<view class="userName">{{item.userName}}</view>
+			<view class="FAF">
+				<text class="follwAndFans">{{item.followNum}}关注</text>
+				<text class="break"> | </text>
+				<text class="follwAndFans">{{item.fansNum}}粉丝</text></view>
+
+		</view>
+
+		<view wx:if="{{item.isFollow}}" class="rightSideButtom" catchtap="changeFollow" data-src="{{index}}">已关注</view>
+		<view wx:if="{{!item.isFollow}}" class="rightSideButtom2" catchtap="changeFollow" data-src="{{index}}">+ 关注</view>
+	</view>
+
+
+
+
+
+</scroll-view>

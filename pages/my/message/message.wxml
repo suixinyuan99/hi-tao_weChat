@@ -18,32 +18,32 @@
     <!--</view>-->
     <block wx:for="{{message}}" wx:key="{{index}}">
         <!--<view class="personal list" bindtap="personal" data-goodid="{{item.goodId}}" data-receiveropenid="{{item.openid}}" data-id="{{item.id}}">-->
-        <view class="personal list" bindtap="message" data-id="{{item.goodId}}" data-goodproperty="{{item.goodProperty}}">
+        <view class="personal list" bindtap="message" data-id="{{item.goodID}}" data-goodtype="{{item.goodType}}" data-notify="{{item.notifyID}}">
             <view class="left_img">
-               <image src="{{item.userAvatarurl}}"></image>
+               <image src="{{item.fromUserAvartar}}"></image>
             </view>
             <view class="center">
                 <view class="persontop">
-                    <view class="personname">{{item.userName}}</view>
-                    <view class="persontime">{{item.commentTime}}</view>
+                    <text class="personname">{{item.fromUserName}}</text>
+                    <text class="persontime">{{item.createdDate}}</text>
                 </view>
                 <view class="down">
-                {{item.commentData}}
+                {{item.notifyContent}}
                 </view>
             </view>
             <view class="right" wx:if="{{item.showImg}}">
-                <image src="{{item.image_url[0]}}"></image>
+                <image src="{{item.firstImgUrl}}"  mode='scaleToFill'></image>
             </view>
         </view>
     </block>
-    <view class="system list" bindtap="system">
+    <!-- <view class="system list" bindtap="system">
         <view class="left_img">
             <image src="../../../images/littleT.png"></image>
         </view>
         <view class="center">
             <view class="top">
                 <view class="name">客服广播小T</view>
-                <!-- <view class="time">2018.12.3</view> -->
+                <view class="time">2018.12.3</view>
             </view>
             <view class="down">
                 喇叭小T
@@ -52,5 +52,5 @@
         <view class="right">
 
         </view>
-    </view>
+    </view> -->
 </view>

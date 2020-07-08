@@ -1,58 +1,76 @@
 <view class="header">
 
-    <!--<block wx:if="{{canIUse}}">-->
-        <!--<view class="left">-->
-            <!--<image src="../../images/notLogin.png" background-size="cover"></image>-->
-        <!--</view>-->
-        <!--<button class="center" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">点击授权登录</button>-->
-    <!--</block>-->
-    <!--<block wx:if="{{!canIUse}}">-->
-        <view class="left">
-            <image src="{{avatarUrl}}"></image>
-        </view>
-        <view class="center">{{nickName}}</view>
-    <!--</block>-->
-    <view class="right" wx-if="{{showStudent}}">已认证</view>
-    <view class="right" wx-if="{{!showStudent}}" bindtap="myIdentification">未认证</view>
+	<block wx:if="{{!canIUse}}">
+		<view class="left">
+			<image src="../../images/notLogin.png" background-size="cover"></image>
+		</view>
+		<button class="center"  bindtap="toShouquan">未授权，点击授权登录</button>
+	</block>
+	<block wx:if="{{canIUse}}">
+		<view class="left">
+			<image src="{{avatarUrl}}"></image>
+		</view>
+		<view wx-if="{{!showStudent}}" class="center2">{{nickName}}</view>
+		<view wx-if="{{showStudent}}" class="centerAll">
+			<text class="nickName">{{nickName}}</text>
+			<view>
+				<text class="follwAndFans" bindtap="toMyFollow">{{followNum}}关注</text>
+				<text class="break"> | </text>
+				<text class="follwAndFans" bindtap="toMyFans">{{fansNum}}粉丝</text>
+			</view>
+		</view>
+
+	</block>
+	<view class="right" wx-if="{{showStudent&&canIUse}}">已认证</view>
+	<view class="right" wx-if="{{!showStudent&&canIUse}}" bindtap="myIdentification">未认证</view>
 </view>
 
 <view class="list" bindtap="myPublish">
-    <view class="left">
-        <!-- <image src class="left" src="../../../images/myPublish.png"></image> -->
-        <icon class="iconfont icon-fabusekuai"></icon>
-    </view>
-    <view>我的发布</view>
-    <view class="right">
-        <icon class="iconfont icon-you"></icon>
-    </view>
+	<view class="left">
+		<!-- <image src class="left" src="../../../images/myPublish.png"></image> -->
+		<icon class="iconfont icon-fabusekuai"></icon>
+	</view>
+	<view>我的发布</view>
+	<view class="right">
+		<icon class="iconfont icon-you"></icon>
+	</view>
+</view>
+<view class="list" bindtap="mySelling">
+	<view class="left">
+		<icon class="iconfont icon-maichu"></icon>
+	</view>
+	<view>我卖出的</view>
+	<view class="right">
+		<icon class="iconfont icon-you"></icon>
+	</view>
 </view>
 <view class="list" bindtap="myCollection">
-    <view class="left">
-        <icon class="iconfont icon-wujiaoxing-copy"></icon>
-    </view>
-    <view>我的收藏</view>
-    <view class="right">
-        <icon class="iconfont icon-you"></icon>
-    </view>
+	<view class="left">
+		<icon class="iconfont icon-wujiaoxing-copy"></icon>
+	</view>
+	<view>我的收藏</view>
+	<view class="right">
+		<icon class="iconfont icon-you"></icon>
+	</view>
 </view>
 <view class="list" bindtap="message">
-    <view class="left message_left">
-        <icon class="iconfont icon-xiaoxitongzhi"></icon>
-        <!--<view class="count">-->
-            <!--<text>2</text>-->
-        <!--</view>-->
-    </view>
-    <view>消息通知</view>
-    <view class="right">
-        <icon class="iconfont icon-you"></icon>
-    </view>
+	<view class="left message_left">
+		<icon class="iconfont icon-xiaoxitongzhi"></icon>
+		<!--<view class="count">-->
+		<!--<text>2</text>-->
+		<!--</view>-->
+	</view>
+	<view>消息通知</view>
+	<view class="right">
+		<icon class="iconfont icon-you"></icon>
+	</view>
 </view>
 <view class="list" bindtap="contactUs">
-    <view class="left">
-        <icon class="iconfont icon-youjian"></icon>
-    </view>    
-    <view>联系我们</view>
-    <view class="right">
-        <icon class="iconfont icon-you"></icon>
-    </view>
+	<view class="left">
+		<icon class="iconfont icon-youjian"></icon>
+	</view>
+	<view>联系我们</view>
+	<view class="right">
+		<icon class="iconfont icon-you"></icon>
+	</view>
 </view>

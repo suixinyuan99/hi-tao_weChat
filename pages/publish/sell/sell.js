@@ -1,5 +1,7 @@
 var app = getApp();
 var api = require("../../../utils/api")
+var PUBLISH =api.publish
+var PIC=api.publishPicture
 Page({
     data: {
         data: {
@@ -30,14 +32,14 @@ Page({
             contactValue3: "",
             contactValue2: "",
             contactValue1: "",
-            tips: '照片是必须的哦，上传照片会大大提升交易率哦：）(最多6张)',
-            titlePlaceholder:"宝贝标题，如：前男友送的多喝热水券",
+            tips: '照片是必须的哦，上传照片会大大提升交易率哦：）(最多3张)',
+            titlePlaceholder:"想卖啥？",
             introducePlaceholder:"说出宝贝的故事吧～入手渠道/转手原因/规格尺寸/新旧程度/使用感受",
         },
     },
     onReady: function () {
         wx.setNavigationBarTitle({
-            title: '发布转让'
+            title: '发布闲置'   
         })
     },
     change: function (key, value) {
@@ -55,6 +57,7 @@ Page({
     },
     contact: function (e) {
         this.change('contactIndex', e.detail.value)
+        console.log()
     },
     contact2: function (e) {
         console.log(e.detail.value)
@@ -69,6 +72,15 @@ Page({
         contact2.splice(contactIndex, 1);
         this.change("showContact2", true)
         this.change('contact2', contact2)
+
+
+        console.log("add")
+        console.log("c1")
+        console.log(this.data.data.contact)
+        console.log(this.data.data.contactIndex)
+        console.log("c2")
+        console.log(this.data.data.contact2)
+        console.log(this.data.data.contact2Index)
     },
     add1: function () {
         var contact3 = this.data.data.contact3;
@@ -78,6 +90,88 @@ Page({
         contact3.splice(contact2Index, 1);
         this.change("showContact3", true)
         this.change('contact3', contact3)
+
+        // console.log("add2")
+        // console.log("c1")
+        // console.log(this.data.data.contact)
+        // console.log(this.data.data.contactIndex)
+        // console.log("c2")
+        // console.log(this.data.data.contact2)
+        // console.log(this.data.data.contact2Index)
+
+    },
+    delate1: function () {
+        if(this.data.data.showContact3!=true){
+            var tep = this.data.data.contact2[this.data.data.contact2Index];
+            var origin =['手机号', '微信', 'QQ'];
+            var index =this.data.data.contact.indexOf(tep)
+            var value=this.data.data.contactValue2
+            this.change("contactIndex",index)
+            this.change("contactValue1",value)
+            this.change('contact2', origin)
+            this.change("contact2Index",0)
+            this.change("contactValue2","")
+            this.change("showContact2", false)
+            // console.log("delate1")
+            // console.log("c1")
+            // console.log(this.data.data.contact)
+            // console.log(this.data.data.contactIndex)
+            // console.log("c2")
+            // console.log(this.data.data.contact2)
+            // console.log(this.data.data.contact2Index)
+        }else{
+            var origin =['手机号', '微信', 'QQ'];
+            var c1item=this.data.data.contact2[this.data.data.contact2Index]
+            var c1index=this.data.data.contact.indexOf(c1item)
+            var c1v=this.data.data.contactValue2
+
+            var c2item=this.data.data.contact3[this.data.data.contact3Index]
+            origin.splice(c1index, 1);
+            var c2=origin
+            var c2index=c2.indexOf(c2item)
+            var c2v=this.data.data.contactValue3
+
+            this.change("contactIndex",c1index)
+            this.change("contactValue1",c1v)
+            this.change('contact2', c2)
+            this.change("contact2Index",c2index)
+            this.change("contactValue2",c2v)
+            this.change('contact3', ['手机号', '微信', 'QQ'])
+            this.change("contact3Index",0)
+            this.change("contactValue3","")
+            this.change("showContact3", false)
+
+            // console.log("delate2")
+            // console.log("c1")
+            // console.log(this.data.data.contact)
+            // console.log(this.data.data.contactIndex)
+            // console.log("c2")
+            // console.log(this.data.data.contact2)
+            // console.log(c2)
+            // console.log(this.data.data.contact2Index)
+
+        }
+    },
+    delate2:function () {
+
+        var origin =['手机号', '微信', 'QQ'];
+        var c1item=this.data.data.contact[this.data.data.contactIndex]
+        var c1index=this.data.data.contact.indexOf(c1item)
+
+        var c2item=this.data.data.contact3[this.data.data.contact3Index]
+        origin.splice(c1index, 1);
+        var c2=origin
+        var c2index=c2.indexOf(c2item)
+        var c2v=this.data.data.contactValue3
+
+        this.change('contact2', c2)
+        this.change("contact2Index",c2index)
+        this.change("contactValue2",c2v)
+        this.change('contact3', ['手机号', '微信', 'QQ'])
+        this.change("contact3Index",0)
+        this.change("contactValue3","")
+        this.change("showContact3", false)
+        
     },
     chooseImage: function () {
         let _this = this;
@@ -98,7 +192,7 @@ Page({
     chooseWxImage: function (type) {
         let _this = this;
         wx.chooseImage({
-            count: 6, // 默认9
+            count: 3, // 默认9
             sizeType: ['compressed'],
             sourceType: [type],
             success: function (res) {
@@ -107,10 +201,10 @@ Page({
                 var images = _this.data.data.images;
                 var length = images.length;
                 for (let i = 0; i < tempFilePaths.length; i++) {
-                    if (length >= 6) {
+                    if (length >= 3) {
                         wx.showModal({
                             title: '提示',
-                            content: '图片不能超过6张',
+                            content: '图片不能超过3张',
                             success: function (res) {
                             }
                         })
@@ -134,7 +228,8 @@ Page({
             filePath: data.path[i],
             name: 'file',
             formData: {
-                goodid: data.goodId,
+                goodID: data.goodID,
+                goodType:data.goodType
             },
             header: {
                 "Content-Type": "multipart/form-data",
@@ -155,7 +250,7 @@ Page({
                     })
                     wx.hideLoading();
                     wx.redirectTo({
-                        url: '../../detailIndex/detailIndex?goodId=' + data.goodId + '&goodProperty=0',
+                        url: '../../detailIndex/detailIndex?goodID=' + data.goodID + '&goodType='+data.goodType,
                     })
                 } else {//若图片还没有传完，则继续调用函数
                     data.i = i;
@@ -250,7 +345,7 @@ Page({
             })
             return;
         }
-        if (e.detail.value.title.length > 20) {
+        if (e.detail.value.title.length > 30) {
             wx.showModal({
                 title: '提示',
                 content: '商品标题不能超过20个字哦～',
@@ -461,15 +556,16 @@ Page({
         var userAvatarUrl = getApp().globalData.userInfo.avatarUrl;
         var userName = getApp().globalData.userInfo.nickName;
         var datas = {
-            goodType: this.data.data.type[typeIndex],
+            goodCatagory: this.data.data.type[typeIndex],
             openid: openId,
             goodTitle: e.detail.value.title,
             goodDesc: e.detail.value.introduce,
-            goodPlace: this.data.data.area[areaIndex],
-            goodWx: this.data.data.weixin,
+            goodCampus: this.data.data.area[areaIndex],
+            goodWX: this.data.data.weixin,
             goodTel: this.data.data.telephone,
-            goodQq: this.data.data.QQ,
+            goodQQ: this.data.data.QQ,
             goodPrice: e.detail.value.money,
+            goodType:"sg"
         }
         console.log(this.data.data.loading)
         if (!this.data.data.loading) {
@@ -478,7 +574,7 @@ Page({
             })
             _this.change('loading', true)
             console.log(_this.data.data.loading)
-            app.request(api.publishSellProduct, datas, "POST", this.publishSellProductSuccess)
+            app.request(PUBLISH, datas, "POST", this.publishSellProductSuccess)
         } else {
             wx.showLoading({
                 title: '上传中，请等待',
@@ -487,12 +583,13 @@ Page({
     },
     publishSellProductSuccess: function (res) {
         console.log(res)
-        if (res.data.code == 1010) {
+        if (res.data.msg == "success") {
             //上传图片
             this.uploadimg({
-                url: api.publishSellProductImage,
+                url: PIC,
                 path: this.data.data.images,
-                goodId: res.data.object.goodId,
+                goodID: res.data.result.goodID,
+                goodType:res.data.result.goodType
             })
         } else {
             this.change('loading', false)

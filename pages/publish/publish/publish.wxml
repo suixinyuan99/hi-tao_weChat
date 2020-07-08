@@ -1,8 +1,23 @@
-<view class="container">
-    <view class="sell" bindtap="sell">
-    	<view class="text">转让商品</view>	
+    <view class="pic">
+    <image src="../../../images/publish.jpg" mode='scaleToFill'></image>
     </view>
-	<view class="buy" bindtap="buy">
-    	<view class="text">求购商品</view>	
+
+<view class="contain">
+    <view class="button2" bindtap="sell">
+        <icon class="iconfont icon-xiangji xiangji"></icon>
+    	<view class="text">发布闲置</view>
+        <icon class="iconfont icon-you icon2"></icon>
     </view>
+	<view class="button" bindtap="buy">
+    	<view class="text">发布求购</view>
+         <icon class="iconfont icon-you icon"></icon>
+    </view>
+    <view class="button" bindtap="tg">
+    	<view class="text">发布拼单</view>	
+         <icon class="iconfont icon-you icon"></icon>
+    </view>
+
+ 
+
 </view>
+   <view class="cotainBox"></view>

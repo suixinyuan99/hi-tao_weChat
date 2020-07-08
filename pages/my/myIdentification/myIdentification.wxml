@@ -1,11 +1,14 @@
 <view class="container">
     <image class="headImage" src="{{avatarUrl}}"></image>
     <text class="username">{{nickName}}</text>
+    <text wx:if="{{fail}}" class="text1">上传一卡通后上传一卡通后工作人员会在24h内进行</text>
+    <text wx:if="{{fail}}" class="text1">审核，给您带来的不遍尽情谅解～</text>
 	<view class="img" bindtap="chooseImage">
         <icon class="iconfont icon-tianjia" wx:if="{{!showImage}}"></icon>
         <image src="{{imageSrc}}" wx:if="{{showImage}}"></image>
     </view>
-    <text>认证是使用hi淘的通行证哦！</text>
-    <text>快快上传一卡通吧～</text>
+    <text wx:if="{{!fail}}" class="text1">认证是使用hi淘的通行证哦！</text>
+    <text wx:if="{{!fail}}" class="text1">快快上传一卡通正面照吧～</text>
     <button bindtap="uploadFile">确认上传</button>
+    <navigator wx:if="{{fail}}" url="../contactUs/contactUs" class="username">联系我们</navigator>
 </view>

@@ -4,8 +4,9 @@ page{
 .list{
 	background: #fff;
 	display: flex;
-	height: 150rpx;
-	margin: 5rpx 0;
+	/* height: 150rpx; */
+	padding: 5rpx 0 5rpx 0;
+	margin: 10rpx 0;
 }
 .left{
 	width: 110rpx;
@@ -35,6 +36,7 @@ page{
 	display: flex;
 	flex-direction: column;
 	margin: 20rpx;
+	word-break:break-all;
 }
 .center .top .time{
 	color: #aaa;
@@ -42,7 +44,9 @@ page{
 	margin-left: 20rpx;
 }
 .center .down{
-	margin-top: 10rpx;
+	margin-top: 20rpx;
+	color: #aaa;
+	font-size:16px;
 }
 .right{
 	flex: 1;

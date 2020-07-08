@@ -1,7 +1,9 @@
 var app = getApp();
 var api = require('../../../utils/api');
-var API_URL = api.myPublish;
-var API_END=api.finishProduct;
+var API_URL = api.getMyPublish;
+var API_END = api.finishProduct;
+var API_SHINE = api.shineGoods;
+var API_DELATE = api.delateGoods;
 Page({
     data: {
         winWidth: 0,
@@ -36,20 +38,6 @@ Page({
             title: '我的发布'
         })
     },
-    bindChange: function (e) {
-        var that = this;
-        that.setData({currentTab: e.detail.current});
-    },
-    swichNav: function (e) {
-        var that = this;
-        if (this.data.currentTab === e.target.dataset.current) {
-            return false;
-        } else {
-            that.setData({
-                currentTab: e.target.dataset.current
-            })
-        }
-    },
     onPullDownRefresh: function () {
         this.getLists();
         wx.stopPullDownRefresh();
@@ -57,41 +45,41 @@ Page({
     },
     getLists: function () {
         var that = this;
-        var openid = getApp().globalData.openId;
-        app.request(API_URL, {openid: openid}, 'GET', this.getMyPublishSuccess);
+        var openid = app.globalData.openId;
+        app.request(API_URL, {
+            openid: openid
+        }, 'GET', this.getMyPublishSuccess);
     },
     getMyPublishSuccess: function (res) {
         console.log(res);
-        if(res.statusCode==404){
+        if (res.statusCode == 404) {
             wx.hideLoading();
             wx.showModal({
                 title: '提示',
                 content: '服务器开小差了～请退出微信后再试',
             })
-        }else{
-            var dataSell = res.data.sellGood;
-            var dataBuy = res.data.buyGood;
-            if(dataSell.length!=0){
-                for (let i = 0; i < dataSell.length; i++) {
-                    if (dataSell[i].imageUrl == ""||dataSell[i].imageUrl.length == 0) {
-                        dataSell[i].showImg = false;
+        } else {
+            var data = res.data.result;
+            if (data.length != 0) {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].firstImgUrl == "" || data[i].firstImgUrl == null) {
+                        data[i].showImg = false;
                     } else {
-                        dataSell[i].showImg = true;
+                        data[i].showImg = true;
                     }
-                }
-            }
-            if(dataBuy.length!=0){
-                for (let i = 0; i < dataBuy.length; i++) {
-                    if (dataBuy[i].imageUrl == ""||dataBuy[i].imageUrl.length == 0) {
-                        dataBuy[i].showImg = false;
-                    } else {
-                        dataBuy[i].showImg = true;
+                    if (data[i].goodType == "bg") {
+                        data[i].goodTypeShow = "求购"
+                    }
+                    if (data[i].goodType == "sg") {
+                        data[i].goodTypeShow = "转让"
+                    }
+                    if (data[i].goodType == "tg") {
+                        data[i].goodTypeShow = "拼单"
                     }
                 }
             }
             this.setData({
-                list: dataSell,
-                list1:dataBuy
+                list: data
             })
             wx.hideLoading();
         }
@@ -104,42 +92,119 @@ Page({
             content: '确定完成并关闭交易吗？',
             success(res) {
                 if (res.confirm) {
-                    var goodId = e.currentTarget.dataset.id;
-                    var goodProperty = e.currentTarget.dataset.goodproperty;
+                    var goodID = e.currentTarget.dataset.id;
+                    var goodType = e.currentTarget.dataset.goodtype;
                     app.request(API_END, {
-                        openid: app.globalData.openId,
-                        goodId: goodId,
-                        type: goodProperty
-                    }, 'GET', that.endProductSuccess)
+                        goodID: goodID,
+                        goodType: goodType
+                    }, 'POST', that.endProductSuccess)
                 } else if (res.cancel) {
                     return
                 }
             }
         })
     },
-    endProductSuccess:function(res){
+    endProductSuccess: function (res) {
         console.log(res);
-        if (res.data.code == 1080) {
+        if (res.data.msg == "success") {
             wx.showToast({
                 title: '交易成功！',
                 icon: 'success',
                 duration: 2000
             })
             this.getLists();
+            app.globalData.needRefresh=true
         } else {
             wx.showToast({
                 title: res.data.message,
                 icon: 'success',
                 duration: 2000
             })
+            this.getLists();
         }
     },
-    edit:function(e){
-        var goodId = e.currentTarget.dataset.id;
-        var goodProperty = e.currentTarget.dataset.goodproperty;
+    edit: function (e) {
+        var goodID = e.currentTarget.dataset.id;
+        var goodType = e.currentTarget.dataset.goodtype;
         wx.navigateTo({
-            url:"../../edit/edit?goodId="+goodId+"&goodProperty="+goodProperty
+            url: "../../edit/edit?goodID=" + goodID + "&goodType=" + goodType
         })
+    },
+    shine: function (e) {
+        var that = this;
+        wx.showModal({
+            title: '擦亮商品',
+            content: '确定要擦亮这个商品吗？',
+            success(res) {
+                if (res.confirm) {
+                    var goodID = e.currentTarget.dataset.id;
+                    var goodType = e.currentTarget.dataset.goodtype;
+                    app.request(API_SHINE, {
+                        goodID: goodID,
+                        goodType: goodType
+                    }, 'POST', that.shineSuccess)
+                } else if (res.cancel) {
+                    return
+                }
+            }
+        })
+    },
+    shineSuccess: function (res) {
+        console.log(res);
+        if (res.data.msg == "success") {
+            wx.showToast({
+                title: '擦亮成功！',
+                icon: 'success',
+                duration: 2000
+            })
+            this.getLists();
+            app.globalData.needRefresh=true
+        } else {
+            wx.showToast({
+                title: res.data.message,
+                icon: 'success',
+                duration: 2000
+            })
+            this.getLists();
+        }
+    },
+    delate: function (e) {
+        var that = this;
+        wx.showModal({
+            title: '删除商品',
+            content: '确定要删除这个商品吗？',
+            success(res) {
+                if (res.confirm) {
+                    var goodID = e.currentTarget.dataset.id;
+                    var goodType = e.currentTarget.dataset.goodtype;
+                    app.request(API_DELATE, {
+                        goodID: goodID,
+                        goodType: goodType
+                    }, 'POST', that.delateSuccess)
+                } else if (res.cancel) {
+                    return
+                }
+            }
+        })
+    },
+    delateSuccess: function (res) {
+        console.log(res);
+        if (res.data.msg == "success") {
+            wx.showToast({
+                title: '删除成功！',
+                icon: 'success',
+                duration: 2000
+            })
+            this.getLists();
+            app.globalData.needRefresh=true
+        } else {
+            wx.showToast({
+                title: res.data.message,
+                icon: 'success',
+                duration: 2000
+            })
+            this.getLists();
+        }
     },
     onShareAppMessage: function () {
         return {

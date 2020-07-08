@@ -1,4 +1,5 @@
 var domain=getApp().globalData.domain;
+var app = getApp();
 Page({
 
   /**
@@ -26,6 +27,25 @@ Page({
         })
     },
     sell:function(){
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能发布商品哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
       if(parseInt(getApp().globalData.userState)==0){
           wx.navigateTo({
             url: '../sell/sell'
@@ -35,9 +55,56 @@ Page({
       }
     },
     buy:function(){
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能求购商品哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
         if(parseInt(getApp().globalData.userState)==0){
             wx.navigateTo({
                 url: '../buy/buy'
+            })
+        }else{
+            this.show();
+        }
+    },
+    tg:function(){
+        if (!app.globalData.userShouquan) {
+            wx.showModal({
+                title: '提示',
+                content: '授权登录才能发布拼单哦',
+                cancelText:"先不授权",
+                confirmText:"前往授权",
+                success: function (res) {
+                    if (res.confirm) {
+                        console.log('用户点击确定')
+                        wx.navigateTo({
+                            url: '../shouquan/shouquan',
+                        })
+                    } else if (res.cancel) {
+
+                    }
+                }
+            })
+            return
+        } 
+        if(parseInt(getApp().globalData.userState)==0){
+            wx.navigateTo({
+                url: '../tg/tg'
             })
         }else{
             this.show();

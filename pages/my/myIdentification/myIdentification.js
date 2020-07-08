@@ -1,5 +1,6 @@
 var app = getApp();
 var api = require('../../../utils/api');
+var fail=false;
 Page({
 
     /**
@@ -10,6 +11,7 @@ Page({
         showImage:false,
         avatarUrl:"",
         nickName:"",
+        fail:false
     },
     onLoad:function(){
         var _this=this;
@@ -124,14 +126,22 @@ Page({
         // console.log(JSON.parse(res.data.data));
         wx.hideLoading();
         var res=JSON.parse(res.data)
+        var that=this
         console.log(res);
-        if(res.code==1113){
+        if(res.result==0 || res.msg=="无法识别图片，提交人工审核"){
             console.log('图片不能识别');
             wx.showModal({
                 title: '提示',
-                content: '图片不能识别，请再试一次或等待人工审核',
+                content: 'sorry，系统开小差去拉！或许可以尝试一下人工认证通道呢：）',
+                cancelText:"再试一次",
+                confirmText:"人工认证",
+                confirmColor:"#FF6201",
                 success: function (res) {
                     if (res.confirm) {
+                        fail=true
+                        that.setData({
+                            fail:true
+                        })
                         // console.log('用户点击确定')
                     } else if (res.cancel) {
                         // console.log('用户点击取消')

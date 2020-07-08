@@ -1,5 +1,6 @@
 var app = getApp();
 var api = require('../../../utils/api');
+var GET_MESSAGE=api.getNotify;
 Page({
 
   /**
@@ -13,7 +14,7 @@ Page({
       showStudent:false
   },
   onShow:function(){
-      app.request(api.getMyComments,{openid:app.globalData.openId},'GET',this.getMyCommentsSuccess)
+      app.request(GET_MESSAGE,{openid:app.globalData.openId},'GET',this.getMyCommentsSuccess)
       //查看是否验证
       wx.showToast({
           title:"加载中...",
@@ -28,10 +29,10 @@ Page({
   },
     getMyCommentsSuccess:function(res){
       console.log(res)
-        var data=res.data;
+        var data=res.data.result;
         if(data){
             for (let i = 0; i < data.length; i++) {
-                if (data[i].image_url.length == 0) {
+                if ( data[i].firstImgUrl=="null" ||data[i].firstImgUrl==null) {
                     data[i].showImg = false;
                 } else {
                     data[i].showImg = true;
@@ -89,10 +90,14 @@ Page({
   },
     message:function(e){
         var id=e.currentTarget.dataset.id;
-        var goodProperty=e.currentTarget.dataset.goodproperty;
+        var goodType=e.currentTarget.dataset.goodtype;
         wx.redirectTo({
-            url: '../../detailIndex/detailIndex?goodId=' +id + '&goodProperty='+goodProperty,
+            url: '../../detailIndex/detailIndex?goodID=' +id + '&goodType='+goodType,
         })
+        app.request(api.readNotify,{notifyID:e.currentTarget.dataset.notify},'GET',this.getNotifySuccess)
+    },
+    getNotifySuccess:function(e){
+        console.log(e)
     },
     system:function(){
         wx.navigateTo({

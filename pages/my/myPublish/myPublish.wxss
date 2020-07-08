@@ -94,21 +94,27 @@
   padding-right:20rpx;*/
   padding:20rpx 20rpx 10rpx 40rpx;
 }
-.info-item .mask{
+.info-item .mask {
   position: absolute;
   height: 220rpx;
   line-height: 280rpx;
   width: 100%;
   text-align: center;
   vertical-align: middle;
-  z-index:990;
-  background-color: rgba(255,255,255,0.7);
+  z-index: 990;
+  background-color: rgba(255, 255, 255, 0.7);
 }
-.info-item .mask image{
-  transform:rotate(-15deg);
-  height: 40%;
-  width:260rpx;
+
+
+.info-item .mask image {
+  /* transform: rotate(-15deg); */
+  position: absolute;
+  bottom: 0;
+  height: 120rpx;
+  width: 120rpx;
+  right: 60rpx;
 }
+
 .leftSide{
   flex:1;
 }
@@ -186,6 +192,7 @@
   }
   .tag{
     float: left;
+    color: #fff;
   }
   .tag image{
     margin-left: 66rpx;
@@ -211,8 +218,10 @@
 .down{
   display: flex;
   justify-content:flex-end;
-  width:90%;
+  width:100%;
   margin-bottom: 20rpx;
+  justify-content: space-around;
+
 }
 .end{
   width: 30%;
@@ -225,12 +234,8 @@
 .list{
   border-bottom: 1px solid #aaa;
 }
-.down{
-  display: flex;
-  width:100%;
-  margin: 0 auto 20rpx;
 
-}
+
 .downLeft,.downRight{
   flex:1;
   width: 40%;
@@ -250,10 +255,84 @@
 .downRight{
   border-radius: 0 50px 50px 0;
 }
+
+.down1{
+  width: 30%;
+  height: 50rpx;
+  line-height: 50rpx;
+  margin: 20rpx 10rpx 20rpx 10rpx;
+  color: white;
+  color: #E34A07;
+  text-align: center;
+  border: 1px solid #E34A07;
+  padding: 5px 0 5px 15px;
+  position: relative;
+  border-radius: 50px 0 0 50px;
+}
+.down2{
+  width: 15%;
+  height: 50rpx;
+  line-height: 50rpx;
+  margin: 20rpx 10rpx 20rpx 10rpx;
+  color: white;
+  color: #E34A07;
+  text-align: center;
+  border: 1px solid #E34A07;
+  padding: 5px 0 5px 0px;
+  position: relative;
+}
+
+.down3{
+  width: 20%;
+  height: 50rpx;
+  line-height: 50rpx;
+  margin: 20rpx 10rpx 20rpx 10rpx;
+  color: white;
+  color: #E34A07;
+  text-align: center;
+  border: 1px solid #E34A07;
+  padding: 5px 0 5px 10px;
+  position: relative;
+border-radius: 0 50px 50px 0;
+}
+
+.down4{
+  width: 90%;
+  height: 50rpx;
+  line-height: 50rpx;
+  margin: 20rpx 10rpx 20rpx 10rpx;
+  color: white;
+  color: #E34A07;
+  text-align: center;
+  border: 1px solid #E34A07;
+  padding: 5px 0 5px 0px;
+  position: relative;
+border-radius: 50px 50px 50px 50px;
+}
+
+
+
+
+
 .icon-xiaolian,.icon-bianji{
   color: #E34A07;
   position: absolute;
   left: 20rpx;
   top: 5rpx;
   font-size: 50rpx;
+}
+
+/* NEW */
+.showBlock{
+  background-color: #fff;
+  border-radius: 20rpx;
+  margin-top: 20rpx;
+  width: 97%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.scrollBox{
+background-color: rgba(181, 175, 175, 0.16);
+
 }

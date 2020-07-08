@@ -1,0 +1,278 @@
+/* 显示区 */
+.showBox {
+  position: fixed;
+  top: 0rpx;
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  background-color: rgba(181, 175, 175, 0.17);
+
+
+}
+
+
+.userBox {
+  background-color: #fff;
+  width: 97%;
+  height: 212rpx;
+  display: flex;
+  border-radius: 20rpx;
+  margin-bottom: 12rpx;
+  margin-top: 12rpx;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.leftSide {
+  display: flex;
+  flex: none;
+  height: 212rpx;
+  /* width: 170rpx; */
+}
+
+.leftPicture {
+  margin-top: 36rpx;
+  margin-left: 28rpx;
+  margin-right: 28rpx;
+  width: 140rpx;
+  height: 140rpx;
+}
+
+.leftPicture image {
+  width: 100%;
+  height: 100%;
+}
+
+
+.rightSide {
+  height: 100%;
+  width: 70%;
+}
+
+.userName {
+  color: #E51C3C;
+  font-size: 40rpx;
+  margin-bottom: 10rpx;
+  margin-top: 32rpx;
+}
+
+.FAF {
+  font-size: 32rpx;
+  font-family: PingFangSC-regular;
+}
+
+.follwAndFans {
+  font-size: 32rpx;
+}
+
+.break {
+  font-size: 50rpx;
+  color: #bbb;
+}
+
+
+.rightSideButtom {
+  width: 180rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: rgba(255, 255, 255, 1);
+  color: rgba(16, 16, 16, 1);
+  font-size: 28rpx;
+  text-align: center;
+  font-family: Arial;
+  border: 1px solid rgba(255, 98, 1, 1);
+  margin-right: 50rpx;
+  margin-top: 48rpx;
+}
+
+.rightSideButtom2 {
+  width: 180rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: rgba(255, 98, 1, 1);
+  color: #fff;
+  font-size: 28rpx;
+  text-align: center;
+  font-family: Arial;
+  border: 1px solid rgba(255, 98, 1, 1);
+  margin-right: 50rpx;
+  margin-top: 48rpx;
+}
+
+
+/* 原有 */
+
+
+.info-item {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  /*padding-bottom: 30rpx;
+  padding-right:20rpx;*/
+  padding: 20rpx 20rpx 10rpx 40rpx;
+  background-color: #fff;
+  flex-wrap: wrap;
+}
+
+.speItem {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  /*padding-bottom: 30rpx;
+  padding-right:20rpx;*/
+  padding: 20rpx 20rpx 10rpx 40rpx;
+  margin: 10rpx 5rpx 10rpx 20rpx;
+  background-color: #fff;
+  border-radius: 20rpx 20rpx 20rpx 20rpx;
+  flex-wrap: wrap;
+}
+
+
+
+.info-item .mask {
+  position: absolute;
+  height: 220rpx;
+  line-height: 280rpx;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  z-index: 990;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.info-item .mask image {
+  transform: rotate(-15deg);
+  height: 40%;
+  width: 260rpx;
+}
+
+
+
+
+.showPicture {
+  position: relative;
+  width: 220rpx;
+  height: 220rpx;
+
+}
+
+.showPicture image {
+  width: 100%;
+  height: 100%;
+  border-radius: 15rpx;
+}
+
+.showPicture .tag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: #F3490A;
+  border-radius: 0 0 15rpx 15rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #fff;
+}
+
+
+
+
+
+.title {
+  font-size: 32rpx;
+  line-height: 50rpx;
+}
+
+.title text {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  width: 95%;
+  -webkit-box-orient: vertical;
+  align-content: center;
+  /*text-indent: -12rpx;*/
+}
+
+.priceAndWatch {
+  margin: 10rpx 0;
+  width: 90%;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+
+.priceAndWatch text {
+  font-size: 30rpx;
+}
+
+.priceAndWatch .price {
+  float: left;
+  color: #e73349;
+  font-size: 32rpx;
+}
+
+.priceAndWatch .watch {
+  float: right;
+  color: #bbb;
+  font-size: 26rpx;
+}
+
+
+
+.timeCollect {
+  position: absolute;
+  bottom: 0rpx;
+  font-size: 24rpx;
+  color: #aaa;
+}
+
+.date {
+  float: left;
+  height: 45rpx;
+  line-height: 45rpx;
+}
+
+.tag {
+  float: left;
+}
+
+.tag image {
+  margin-left: 66rpx;
+  height: 45rpx;
+  width: 45rpx;
+  margin-right: 10rpx;
+}
+
+.noData {
+  margin-top: 30%;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.noData .iconfont {
+  font-size: 250rpx;
+  color: #666;
+}
+
+.noData view {
+  font-size: 40rpx;
+  color: #666;
+}
+
+.tips {
+  padding: 0 20rpx;
+  font-size: 30rpx;
+  text-align: center;
+  color: #aaa;
+}

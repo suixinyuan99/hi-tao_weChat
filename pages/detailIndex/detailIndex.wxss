@@ -94,7 +94,29 @@ swiper-item image {
 	.userName{
 		float: left;
 		line-height: 130rpx;
-		margin-left: 20rpx;
+		margin-left: 40rpx;
+	}
+	.followBottom{
+		float:right;
+		margin-top:37rpx;
+		width: 150rpx;
+		height:60rpx;
+		line-height:60rpx;
+		background: #FFCC01;
+		color:#fff;
+		font-size: 26rpx;
+		opacity: 0.9;
+	}
+	.followBottom2{
+		float:right;
+		margin-top:37rpx;
+		width: 150rpx;
+		height:60rpx;
+		line-height:60rpx;
+		background: #fff;
+		color:#FFCC01;
+		font-size: 26rpx;
+		opacity: 0.9;
 	}
 
 .numberWrap{
@@ -282,7 +304,7 @@ swiper-item image {
 }
 /*评论留言展示*/
 .commentWrap{
-	margin-top: 15rpx;
+	margin-top: 30rpx;
 	background: #fff;
 }
 .commentWrap .comment{
@@ -305,23 +327,30 @@ swiper-item image {
 }
 .message{
 	display: flex;
+	justify-content: flex-start
 }
 .message .img{
-	flex:0.5;
+
 }
 .message .img image{
-	width: 50rpx;
-	height: 50rpx;
+	width: 80rpx;
+	height: 80rpx;
 	border-radius: 50%;
 }
 .message .name{
-	flex:1.5;
+	/* flex:1.5; */
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space:nowrap;
+	margin-left:20rpx ;
+	line-height: 80rpx;
 }
 .message .time{
-	flex:3;
+	/* flex:3; */
+	font-size: 24rpx;
+	margin-bottom:auto ;
+	margin-top:auto;
+	margin-left:20rpx ;
 }
 .content{
 	margin-left: 60rpx;

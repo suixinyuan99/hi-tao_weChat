@@ -1,6 +1,7 @@
 page{
 	background: #eee;
 	position:relative;
+	font-family: PingFangSC-regular;
 }
 .list{
 	background: #fff;
@@ -59,3 +60,5 @@ image{
 .titleIntroduce{
 	color: #E34A07;
 }
+
+

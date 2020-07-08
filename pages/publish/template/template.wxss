@@ -33,6 +33,10 @@
     font-size: 25rpx;
     padding: 40rpx;
     color: #ddd;
+    word-break:break-all;
+    white-space: normal;
+    display: inline-block;
+
 }
 
 
@@ -44,6 +48,7 @@
 .money{
     border-bottom: 1px solid #ccc;
     position: relative;
+    padding: 10rpx;
 }
 .weixin input,.telephone input,.contact input,.contact2 input,.contact3 input{
     display: inline-block;
@@ -83,11 +88,15 @@
     width: 100%;
     margin: 20rpx 40rpx 0 40rpx;
 }
-.type,.area{
+.area{
     border-bottom: 1px solid #ccc;
-    width: 42%;
+    width: 43%;
+    padding-bottom: 10rpx;
 }
 .type{
+    border-bottom: 1px solid #ccc;
+    width: 43%;
+    padding-bottom: 10rpx;
     margin: 0 20px;
 }
 .label{
@@ -110,10 +119,17 @@
 }
 .productType{
     width: 39%;
-    padding-left: 20rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
 }
 .down{
     position: absolute;
+    right: 5rpx;
+    top: 10rpx;
+    width: 30rpx;
+    height: 30rpx;
+}
+.down2{
     right: 5rpx;
     top: 10rpx;
     width: 30rpx;
@@ -134,9 +150,12 @@
 }
 .read checkbox-group{
     display: inline-block;
+    margin-left: auto;
 }
 .read text{
     color: #96B8EC;
+    margin-right: auto;
+
 }
 button{
     background: #F3490A;
@@ -164,6 +183,22 @@ button{
 .contact picker,.contact2 picker,.contact3 picker{
     width: 450rpx;
 }
+.contact2,.contact3{
+    border-top: 1rpx #BBB solid;
+    margin-top: 0rpx;
+    padding-top: 40rpx;
+}
+.contact2 input,.contact3 input{
+    top:40rpx;
+}
+.contact2 .add{
+    top: 40rpx;
+}
+.delate{
+    position: absolute;
+    right: 0rpx;
+}
+
 .showImage{
     display: flex;
     flex-wrap: wrap;
@@ -192,7 +227,7 @@ button{
     position: absolute;
     top: 4rpx;
     left: 144rpx;
-    color: aaa;
+    color: #aaa;
 }
 .pickerView{
     height: 56rpx;

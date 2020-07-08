@@ -88,3 +88,6 @@
   content: "\eca7";
 }
 
+.icon-xiaoxi:before {
+  content: "\e60b";
+}
