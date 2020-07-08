@@ -1,0 +1,11 @@
+<view class="container">
+    <image class="headImage" src="{{avatarUrl}}"></image>
+    <text class="username">{{nickName}}</text>
+	<view class="img" bindtap="chooseImage">
+        <icon class="iconfont icon-tianjia" wx:if="{{!showImage}}"></icon>
+        <image src="{{imageSrc}}" wx:if="{{showImage}}"></image>
+    </view>
+    <text>认证是使用hi淘的通行证哦！</text>
+    <text>快快上传一卡通吧～</text>
+    <button bindtap="uploadFile">确认上传</button>
+</view>

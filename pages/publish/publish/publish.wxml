@@ -1,0 +1,8 @@
+<view class="container">
+    <view class="sell" bindtap="sell">
+    	<view class="text">转让商品</view>	
+    </view>
+	<view class="buy" bindtap="buy">
+    	<view class="text">求购商品</view>	
+    </view>
+</view>

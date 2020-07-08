@@ -1,0 +1,25 @@
+<view class="message">
+<view wx:if="{{show}}">
+    <block  wx:for="{{content}}" wx:key="{{item}}">
+        <view class="list">
+            <view class="time">
+                {{item.time}}
+            </view>
+            <view class="img_text">
+                <view class="img leftImg">
+                    <image src="../../../../images/littleT.png"></image>
+                </view>
+                <view class="content green">
+                    {{item.content}}
+                </view>
+                <view class="clear"></view>
+            </view>
+        </view>
+    </block>
+    </view>
+    <view wx:if="{{!show}}" class="noData">
+    	<icon class="iconfont icon-wutupianyemian"></icon>
+    	<view>这里还没有信息哦！</view>
+    </view>
+</view>
+

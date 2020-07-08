@@ -1,0 +1,269 @@
+<view class='top'>
+    <!-- 搜索框 -->
+    <view class="search">
+        <view class="{{ focus ? 'onSearch_arr' : 'search_arr' }}">
+            <icon class="searchcion" size='20' type='search'></icon>
+            <input placeholder="书籍资料/电子产品/生活用品..." value="{{searchValue}}" bindconfirm="onSearch" bindfocus='onFocus'
+                   bindblur='onBlur'/>
+        </view>
+        <view wx:if="{{focus}}" class='cancelBtn' bindtap="onCancelSearch">
+            <button size='mini'>取消</button>
+        </view>
+
+        <view class="wrap" wx:if="{{beforeChooseCategory}}">
+            <view class="c-wrap">
+                <view class='categories'>
+                    <view class="columns">
+                        <view>
+                            <view class="text" data-category="书籍资料" bindtap="searchByCategory">
+                                书籍资料
+                            </view>
+                        </view>
+                        <view>
+                            <view class="text" data-category="数码电子" bindtap="searchByCategory">
+                                数码电子
+                            </view>
+                        </view>
+                        <view>
+                            <view class="text" data-category="日用百货" bindtap="searchByCategory">
+                                日用百货
+                            </view>
+                        </view>
+                    </view>
+                    <view class="columns">
+                        <view>
+                            <view class="text" data-category="美妆护肤" bindtap="searchByCategory">
+                                美妆护肤
+                            </view>
+                        </view>
+                        <view>
+                            <view class="text" data-category="卡票出让" bindtap="searchByCategory">
+                                卡票出让
+                            </view>
+                        </view>
+                        <view>
+                            <view class="text" data-category="吃喝分享" bindtap="searchByCategory">
+                                吃喝分享
+                            </view>
+                        </view>
+                    </view>
+                    <view class="columns">
+                        <view>
+                            <view class="text" data-category="鞋衣配饰" bindtap="searchByCategory">
+                                鞋衣配饰
+                            </view>
+                        </view>
+                        <view class="noShow"></view>
+                        <view class="noShow"></view>
+                    </view>
+                    <view class="navText">
+                        <text> 点击试试新搜索功能吧~ </text>        
+                    </view>
+                </view>
+            </view>
+            <view class="mask"></view>
+        </view>
+        
+        
+
+
+    </view>
+    <!-- 导航栏 -->
+    <view class="swiper-tab">
+        <view class="swiper-tab-list" data-current="0" bindtap="swichNav">
+            <view class="{{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">
+                转让
+            </view>
+        </view>
+        <view class="swiper-tab-list" data-current="1" bindtap="swichNav">
+            <view class="{{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">
+                求购
+            </view>
+        </view>
+    </view>
+</view>
+
+<swiper current="{{currentTab}}" class="swiper-box" duration="300" bindchange="bindChange">
+    <!-- 非搜索区 -->
+    <block wx:if="{{ isNotSearch }}">
+        <swiper-item>
+            <scroll-view bindscrolltolower="pullUpLoad" bindscrolltoupper="refresh" scroll-y="true"
+                         style="height:{{winHeight - 90}}px">
+                <view wx:if="{{list.length==0}}" class="noData">
+                    <icon class="iconfont icon-wutupianyemian"></icon>
+                    <view>这里还没有商品信息哦！</view>
+                </view>
+                <view wx:if="{{top}}" class="tips">
+                    <text> 按住“转让”和“求购”导航栏水平线下拉刷新</text>
+                </view>
+                <block wx:for="{{ list }}" wx:key="{{index}}">
+                    <navigator url="../detailIndex/detailIndex?goodId={{item.goodId}}&goodProperty=0" class='info-item'>
+                        <view wx:if="{{item.goodState===1}}" class='mask'>
+                            <image style="" mode="" src="../../images/done.png"></image>
+                        </view>
+                        <view class='leftSide'>
+                            <view class='showPicture'>
+                                <image style="" mode="scaleToFill" src="{{item.imageUrl[0]}}" binderror="" bindload=""
+                                       wx:if="{{item.showImg}}"></image>
+                                <image wx:if="{{!item.showImg}}" mode="scaleToFill"
+                                       src="../../images/noImg.png"></image>
+                                <view class='tag'>#{{item.goodType}}</view>
+                            </view>
+                        </view>
+
+                        <view class='rightSide'>
+                            <view class='title'>
+                                <!-- <text> 【{{ item.goodPlace }}】{{ item.goodTitle }}</text> -->
+                                <text>{{ item.goodTitle }}</text>
+                            </view>
+
+                            <view class='priceAndWatch'>
+                                <text class='price'> ￥{{ item.goodPrice }}</text>
+                                <text class='watch'> {{ item.clickRate }}人|浏览</text>
+                            </view>
+
+
+                            <view class='timeCollect clearfix'>
+                                <view class='date'>{{ item.goodDate }}</view>
+                            </view>
+                        </view>
+                    </navigator>
+
+                </block>
+            </scroll-view>
+
+
+            <!-- </template> -->
+
+        </swiper-item>
+
+
+        <swiper-item>
+            <scroll-view bindscrolltolower="pullUpLoad1" bindscrolltoupper="refresh" scroll-y="true"
+                         style="height:{{winHeight - 90}}px">
+                <view wx:if="{{list1.length==0}}" class="noData">
+                    <icon class="iconfont icon-wutupianyemian"></icon>
+                    <view>这里还没有商品信息哦！</view>
+                </view>
+                <block wx:for="{{list1}}" wx:key="{{index}}">
+                    <navigator url="../detailIndex/detailIndex?goodId={{item.goodId}}&goodProperty=1" class='info-item'>
+                        <view wx:if="{{item.goodState===1}}" class='mask'>
+                            <image style="" mode="" src="../../images/done.png"></image>
+                        </view>
+                        <view class='leftSide'>
+                            <view class='showPicture'>
+                                <image style="" mode="scaleToFill" src="{{item.imageUrl[0]}}" binderror="" bindload=""
+                                       wx:if="{{item.showImg}}"></image>
+                                <image wx:if="{{!item.showImg}}" mode="scaleToFill"
+                                       src="../../images/noImg.png"></image>
+                                <view class='tag'>#{{item.goodType}}</view>
+                            </view>
+                        </view>
+
+                        <view class='rightSide'>
+                            <view class='title'>
+                                <text>{{ item.goodTitle }}</text>
+                            </view>
+
+                            <view class='priceAndWatch'>
+                                <text class='price'> ￥{{ item.goodPrice }}</text>
+                                <text class='watch'> {{ item.clickRate }}人|浏览</text>
+                            </view>
+
+                            <view class='timeCollect clearfix'>
+                                <view class='date'>{{ item.goodDate }}</view>
+                            </view>
+                        </view>
+                    </navigator>
+                </block>
+            </scroll-view>
+
+        </swiper-item>
+
+    </block>
+
+    <!-- 搜索区 -->
+    <block wx:else>
+        <swiper-item>
+            <scroll-view scroll-y="true" style="height:{{winHeight - 90}}px">
+                <view wx:if="{{list.sellGood.length==0}}" class="noData">
+                    <icon class="iconfont icon-wutupianyemian"></icon>
+                    <view>这里还没有商品信息哦！</view>
+                </view>
+                <block wx:for="{{ list.sellGood }}" wx:key="{{index}}">
+                        <navigator url="../detailIndex/detailIndex?goodId={{item.goodId}}&goodProperty=0" class='info-item'>
+                            <view wx:if="{{item.goodState===1}}" class='mask'>
+                                <image style="" mode="" src="../../images/done.png"></image>
+                            </view>
+                            <view class='leftSide'>
+                                <view class='showPicture'>
+                                    <image wx:if="{{item.imageUrl.length==0}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+                                    <image wx:else style="" mode="scaleToFill" src="{{item.imageUrl[0]}}" binderror=""bindload=""></image>
+                                    <view class='tag'>#{{item.goodType}}</view>
+                                </view>
+                            </view>
+
+                            <view class='rightSide'>
+                                <view class='title'>
+                                    <text>{{ item.goodTitle }}</text>
+                                </view>
+
+                                <view class='priceAndWatch'>
+                                    <text class='price'> ￥{{ item.goodPrice }}</text>
+                                    <text class='watch'> {{ item.clickRate }}人|浏览</text>
+                                </view>
+
+
+                                <view class='timeCollect clearfix'>
+                                    <view class='date'>{{ item.goodDate }}</view>
+                                </view>
+                            </view>
+                        </navigator>
+                </block>
+            </scroll-view>
+        </swiper-item>
+
+        <swiper-item>
+            <scroll-view scroll-y="true" style="height:{{winHeight - 90}}px">
+                <view wx:if="{{list.buygood.length==0}}" class="noData">
+                    <icon class="iconfont icon-wutupianyemian"></icon>
+                    <view>这里还没有商品信息哦！</view>
+                </view>
+                <block wx:for="{{ list.buygood }}">
+                        <navigator
+                                url="../detailIndex/detailIndex?goodId={{item.goodId}}&goodProperty=1"
+                                class='info-item'>
+                            <view wx:if="{{item.goodState===1}}" class='mask'>
+                                <image style="" mode="" src="../../images/done.png"></image>
+                            </view>
+                            <view class='leftSide'>
+                                <view class='showPicture'>
+                                    <image wx:if="{{item.imageUrl.length==0}}" mode="scaleToFill" src="../../images/noImg.png"></image>
+                                    <image wx:else style="" mode="scaleToFill" src="{{item.imageUrl[0]}}" binderror=""bindload=""></image>
+                                    <view class='tag'>#{{item.goodType}}</view>
+                                </view>
+                            </view>
+
+                            <view class='rightSide'>
+                                <view class='title'>
+                                    <text>{{ item.goodTitle }}</text>
+                                </view>
+
+                                <view class='priceAndWatch'>
+                                    <text class='price'> ￥{{ item.goodPrice }}</text>
+                                    <text class='watch'> {{ item.clickRate }}人|浏览</text>
+                                </view>
+
+                                <view class='timeCollect clearfix'>
+                                    <view class='date'>{{ item.goodDate }}</view>
+                                </view>
+                            </view>
+                        </navigator>
+                </block>
+            </scroll-view>
+
+        </swiper-item>
+    </block>
+
+
+</swiper>  

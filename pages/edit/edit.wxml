@@ -1,0 +1,2 @@
+<import src="../publish/template/template.wxml"/>
+<template is="publish" data="{{...data}}"></template>

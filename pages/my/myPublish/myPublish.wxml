@@ -1,0 +1,116 @@
+<view class='top'>
+    <!-- 导航栏 -->
+    <view class="swiper-tab">
+        <view class="swiper-tab-list" data-current="0" bindtap="swichNav">
+            <view class="{{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">
+                转让
+            </view>
+        </view>
+        <view class="swiper-tab-list" data-current="1" bindtap="swichNav">
+            <view class="{{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">
+                求购
+            </view>
+        </view>
+    </view>
+</view>
+
+
+<swiper current="{{currentTab}}" class="swiper-box" duration="300" bindchange="bindChange">
+    <swiper-item>
+        <scroll-view scroll-y="true" style="height:{{winHeight - 90}}px">
+            <view wx:if="{{list.length==0}}" class="noData">
+                <icon class="iconfont icon-wutupianyemian"></icon>
+                <view>这里还没有商品信息哦！</view>
+            </view>
+            <block wx:for="{{ list }}" wx:key="{{index}}">
+                <navigator url="../../detailIndex/detailIndex?goodId={{item.goodId}}&goodProperty=0" class='info-item'>
+                    <view wx:if="{{item.goodState===1}}" class='mask'>
+                        <image style="" mode="" src="../../../images/done.png"></image>
+                    </view>
+                    <view class='leftSide'>
+                        <view class='showPicture'>
+                            <image style="" mode="scaleToFill" src="{{item.imageUrl[0]}}" binderror="" bindload=""
+                                   wx:if="{{item.showImg}}"></image>
+                            <image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../../images/noImg.png"></image>
+                            <view class='tag'>#{{item.goodType}}</view>
+                        </view>
+                    </view>
+
+                    <view class='rightSide'>
+                        <view class='title'>
+                            <text> 【{{ item.goodPlace }}】{{ item.goodTitle }}</text>
+                        </view>
+
+                        <view class='priceAndWatch'>
+                            <text class='price'> ￥{{ item.goodPrice }}</text>
+                            <text class='watch'> {{ item.clickRate }}人|浏览</text>
+                        </view>
+
+
+                        <view class='timeCollect clearfix'>
+                            <view class='date'>{{ item.goodDate }}</view>
+                        </view>
+                    </view>
+                </navigator>
+                <view class="down" wx:if="{{item.goodState===0}}">
+                    <view class="downLeft" bindtap="end" data-id="{{item.goodId}}" data-goodproperty="0">
+                        <icon class="iconfont icon-xiaolian"></icon>交易完成
+                    </view>
+                    <view class="downRight" bindtap="edit" data-id="{{item.goodId}}" data-goodproperty="0">
+                        <icon class="iconfont icon-bianji"></icon>编辑帖子
+                    </view>
+                </view>
+            </block>
+        </scroll-view>
+    </swiper-item>
+
+
+    <swiper-item>
+        <scroll-view scroll-y="true" style="height:{{winHeight - 90}}px">
+            <view wx:if="{{list1.length==0}}" class="noData">
+                <icon class="iconfont icon-wutupianyemian"></icon>
+                <view>这里还没有商品信息哦！</view>
+            </view>
+            <block wx:for="{{ list1 }}" wx:key="{{index}}">
+                <navigator url="../../detailIndex/detailIndex?goodId={{item.goodId}}&goodProperty=1" class='info-item'>
+                    <view wx:if="{{item.goodState===1}}" class='mask'>
+                        <image style="" mode="" src="../../../images/done.png"></image>
+                    </view>
+                    <view class='leftSide'>
+                        <view class='showPicture'>
+                            <image style="" mode="scaleToFill" src="{{item.imageUrl[0]}}" binderror="" bindload=""
+                                   wx:if="{{item.showImg}}"></image>
+                            <image wx:if="{{!item.showImg}}" mode="scaleToFill" src="../../../images/noImg.png"></image>
+                            <view class='tag'>#{{item.goodType}}</view>
+                        </view>
+                    </view>
+                    <view class='rightSide'>
+                        <view class='title'>
+                            <text> 【{{ item.goodPlace }}】{{ item.goodTitle }}</text>
+                        </view>
+
+                        <view class='priceAndWatch'>
+                            <text class='price'> ￥{{ item.goodPrice }}</text>
+                            <text class='watch'> {{ item.clickRate }}人|浏览</text>
+                        </view>
+
+                        <view class='timeCollect clearfix'>
+                            <view class='date'>{{ item.goodDate }}</view>
+                            <!-- <view class='tag'>
+                                <image src="../../images/icon/collection.png" mode="aspectFit"></image>
+                            </view> -->
+                        </view>
+                    </view>
+                </navigator>
+                <view class="down" wx:if="{{item.goodState===0}}">
+                    <view class="downLeft" bindtap="end" data-id="{{item.goodId}}" data-goodproperty="1">
+                        <icon class="iconfont icon-xiaolian"></icon>交易完成
+                    </view>
+                    <view class="downRight" bindtap="edit" data-id="{{item.goodId}}" data-goodproperty="1">
+                        <icon class="iconfont icon-bianji"></icon>编辑帖子
+                    </view>
+                </view>
+            </block>
+        </scroll-view>
+    </swiper-item>
+</swiper>

@@ -1,0 +1,79 @@
+<import src="../template/template.wxml"/>
+<template is="publish" data="{{...data}}"></template>
+ <!--<form bindsubmit="submitTap">-->
+    <!--<view class="title">-->
+         <!--<input type="text" cursor-spacing="18" placeholder="宝贝标题 同学们会很关注噢！" bindblur="title" name="title"/>-->
+    <!--</view>-->
+    <!--<view class="introduce">-->
+            <!--<textarea cursor-spacing="18" name="introduce" id="" cols="30" rows="10" bindblur="introduce" placeholder="介绍商品的详细情况，如物品新旧，心仪价格等情况"></textarea>-->
+    <!--</view>-->
+    <!--<view class="img">-->
+            <!--<view class="showImage">-->
+                <!--<block wx:for="{{images}}" wx:key="{{index}}">-->
+                    <!--<image src="{{item }}"/>-->
+                    <!--<view class="iconpic">-->
+                         <!--<icon class="iconfont icon-delete" bindtap="delete" data-index="{{index}}"></icon>-->
+                    <!--</view>-->
+                <!--</block>-->
+                <!--<image src="../../../images/image.png" bindtap="chooseImage"></image>-->
+            <!--</view>-->
+            <!--<text class="tip">(必填) 上传照片会增大您的成功几率哦！(最多6张)</text>-->
+    <!--</view>-->
+    <!--<view class="money">-->
+        <!--<view class="Label">意向价格</view>-->
+        <!--<input type="digit" cursor-spacing="18" placeholder="" name="money" bindblur="money"/>-->
+        <!--<text class="moneyStyle">￥</text>-->
+    <!--</view>-->
+    <!--<view class="picker">-->
+        <!--<view class="type">-->
+            <!--<picker bindchange="type" value="{{typeIndex}}" range="{{type}}">-->
+                <!--<view class="label">物品分类</view>-->
+                <!--<view class="data productType">{{type[typeIndex]}}<image src="../../../images/down.png" class="down"/></view>-->
+            <!--</picker>-->
+        <!--</view>-->
+        <!--<view class="area">-->
+                <!--<picker bindchange="area" value="{{areaIndex}}" range="{{area}}">-->
+                    <!--<view class="label">校区</view>-->
+                    <!--<view class="data productType">{{area[areaIndex]}}<image src="../../../images/down.png" class="down"/></view>-->
+                <!--</picker>-->
+        <!--</view>-->
+    <!--</view>-->
+     <!--<view class="contact">-->
+         <!--<picker bindchange="contact" value="{{contactIndex}}" range="{{contact}}">-->
+             <!--<view class="data">{{contact[contactIndex]}}<image src="../../../images/down.png" class="down"/></view>-->
+         <!--</picker>-->
+         <!--<input type="text" cursor-spacing="18" placeholder=""/>-->
+         <!--<image wx:if="{{!showContact2}}" bindtap="add" class="add" src="../../../images/publish.png"></image>-->
+     <!--</view>-->
+     <!--<view class="contact2" wx:if="{{showContact2}}">-->
+         <!--<picker bindchange="contact" value="{{contact2Index}}" range="{{contact2}}">-->
+             <!--<view class="data">{{contact2[contact2Index]}}<image src="../../../images/down.png" class="down"/></view>-->
+         <!--</picker>-->
+         <!--<input type="text" cursor-spacing="18" placeholder="" name="telephone"/>-->
+         <!--<image wx:if="{{!showContact3}}" bindtap="add1" class="add" src="../../../images/publish.png"></image>-->
+     <!--</view>-->
+     <!--<view class="contact3" wx:if="{{showContact3}}">-->
+         <!--<picker bindchange="contact" value="{{contact3Index}}" range="{{contact3}}">-->
+             <!--<view class="data">{{contact3[contact3Index]}}<image src="../../../images/down.png" class="down"/></view>-->
+         <!--</picker>-->
+         <!--<input type="text" cursor-spacing="18" placeholder="" name="telephone"/>-->
+     <!--</view>-->
+
+    <!--<view class="read">-->
+            <!--<checkbox-group name="mianze">-->
+                <!--<label><checkbox value="true" checked="{{checkedMianze}}"/>阅读并同意</label>-->
+            <!--</checkbox-group>-->
+            <!--<text bindtap="jumpMianze">{{mianze}}</text>-->
+    <!--</view>-->
+     <!--<button form-type="submit">发布</button>-->
+ <!--</form>-->
+ <!--<modal hidden="{{hiddenmodalput}}" title="免责声明" confirm-text="同意" cancel-text="不同意" bindcancel="cancel" bindconfirm="confirm">-->
+        <!--<text>-->
+        <!--1、一切用户在本小程序时均被视为已经仔细阅读本条款并完全同意。-->
+         <!--2、本小程序为针对高校用户的二手信息发布平台，我们会尽量保证卖家信息的真实性逐一验证，保证用户权益，同时买家购买二手物品请仔细辨别。-->
+            <!--3、交易双方自行承担交易风险和因此产生的经济损失，本小程序不为交易产品信息的可靠性、准确性和产品质量承担任何责任。-->
+            <!--4、小程序所转载的文字、图片、音视频等资料，如果侵犯了第三方的知识产权或其他权利，责任由作者或转载者本人承担，本小程序对此不承担责任。-->
+        <!--</text>-->
+ <!--</modal>-->
+
+

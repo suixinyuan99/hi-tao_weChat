@@ -1,0 +1,85 @@
+page{
+	background: #eee;
+}
+.header{
+	display: flex;
+	padding: 30rpx;
+	background: white;
+	opacity:0.8;
+}
+.header .left{
+	flex:1;
+}
+.header .left image{
+	width: 100rpx;
+	height: 100rpx;
+	margin: 10rpx auto 0;
+	border-radius: 50%;
+}
+.header .center{
+	flex:2;
+	font-size: 35rpx;
+	color: #F3490A;
+	margin: auto;
+}
+/*button.center{*/
+	/*background: #F3490A;*/
+/*}*/
+button.center::after {
+  	border: none
+}
+.header .right{
+	flex: 1;
+	margin: auto;
+	font-size: 30rpx;
+	height: 50rpx;
+	width: 15rpx;
+	line-height: 50rpx;
+	text-align: center;
+	border-radius: 10px;
+	color: white;
+	background: #F3490A;
+}
+.list{
+	background: #fff;
+	margin-top: 10rpx;
+/*	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;*/
+	display: flex;
+	padding: 30rpx 5rpx;
+}
+.list .left{
+	flex: 0.5;
+}
+.list .left icon.iconfont{
+	font-size: 48rpx;
+}
+.list view{
+	flex:5;
+	margin-left: 50rpx;
+	line-height: 60rpx;
+}
+.list .right{
+	flex: 1;
+}
+
+
+.message_left{
+	position: relative;
+}
+.count{
+	position: absolute;
+	background: red;
+	color: white;
+	font-size: 30rpx;
+	font-weight: 700;
+	text-align: center;
+	width: 35rpx;
+	height: 35rpx;
+	border-radius: 50%;
+	left:-15rpx;
+	top: -10rpx;
+}
+icon{
+	color: #E34A07;
+}

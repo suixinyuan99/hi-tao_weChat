@@ -1,0 +1,162 @@
+<!-- banner -->
+<view wx:if="{{isShouquan}}" class="back" bindtap="shouquan">
+	<image src="../../images/index.png"></image>
+	<view>首页</view>
+</view>
+<view class='wrap'>
+	<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="2000" duration="{{duration}}" circular='false' wx:if="{{detailList.showImg}}">
+	  <swiper-item wx:for="{{detailList.imageUrl}}" wx:key="item">
+	    <image src="{{item}}" data-src="{{item}}" data-list="{{detailList.imageUrl}}" mode='aspectFit' bindtap="imgShow"></image>
+	    <!-- <image style="width: {{imagewidth}}px; height: {{imageheight}}px;" src="{{item}}" bindload="imageLoad"></image> -->
+	  </swiper-item>
+	</swiper>
+	<view class="noimg"  wx:if="{{!detailList.showImg}}">
+		<image src="../../images/noImg.png"></image>	
+	</view>
+
+	<view class='baseInfo'>
+		<view class='price'>￥{{detailList.goodPrice}}</view>
+		<view class='watchCollect'>
+			<view> {{detailList.clickRate}}人浏览 </view>
+			<icon class="iconfont icon-shoucang" wx:if="{{scIcon}}" bindtap="onCollect"></icon>
+			<icon class="iconfont icon-shoucang_shixin" wx:if="{{!scIcon}}" bindtap="cancelCollect"></icon>
+		</view>
+	</view>
+
+	<view class='productInfo'>
+		<view class='title'>【{{detailList.goodPlace}}】{{detailList.goodTitle}}</view>
+		<view class='introduce'>
+			<text class='tag'>#{{detailList.goodType}}#</text>
+			<text class='content' selectable="true" maxlength="-1">{{detailList.goodDesc}}</text>
+		</view>
+		<view class='timwrap clearfix'>
+			<view class='time'>
+				{{detailList.goodDate}}
+			</view>
+		</view>
+	</view>
+
+	<view class='user clearfix'>
+		<view class='userImage'>
+			<!-- <image style="" mode="" src="../../images/portrait/1.png" binderror="" bindload=""></image>	 -->
+			<image style="" mode="" src="{{detailList.user.userAvatarUrl}}" binderror="" bindload=""></image>
+		</view>
+		<view class='userName'>
+			{{detailList.user.userName}}
+		</view>
+	</view>
+	
+	
+
+	<view class='numberWrap'>
+		<text> qq </text>
+		<text class="marginLQQ" wx:if="{{noState}}"> ******** </text>
+		<text class="marginLQQ" wx:elif="{{detailList.goodQq === ''}}"> 未填写 </text>
+		<text class="marginLQQ" wx:else> {{detailList.goodQq}} </text>
+		<button class='copy' wx:if="{{noState}}" hover-class="confirm-hover" bindtap='cantCopy'>复制</button>
+		<button class='copy' wx:if="{{noState===false}}" hover-class="confirm-hover" bindtap='copyQq'>复制</button>
+	</view>
+
+	<view class='numberWrap'>
+		<text> 微信号码 </text>
+		<text class="marginL50" wx:if="{{noState}}"> ******** </text>
+		<text class="marginL50" wx:elif="{{detailList.goodWx === ''}}"> 未填写 </text>
+		<text class="marginL50" wx:else> {{detailList.goodWx}} </text>
+		<button class='copy' wx:if="{{noState}}" hover-class="confirm-hover" bindtap='cantCopy'>复制</button>
+		<button class='copy' wx:if="{{noState===false}}" hover-class="confirm-hover" bindtap='copyWx'>复制</button>	
+	</view>
+
+	<view class='numberWrap'>
+		<text> 手机号码 </text>
+		<text class="marginL50" wx:if="{{noState}}"> ******** </text>
+		<text class="marginL50" wx:elif="{{detailList.goodTel === ''}}"> 未填写 </text>
+		<text class="marginL50" wx:else> {{detailList.goodTel}} </text>
+		<button class='copy' wx:if="{{noState}}" hover-class="confirm-hover" bindtap='cantCopy'>复制</button>
+		<button class='copy' wx:if="{{noState===false}}" hover-class="confirm-hover" bindtap='copyTel'>复制</button>	
+	</view>
+
+	<view wx:if="{{noState}}" class='tips'>
+		为保障用户信息安全，请您先进行<text class='c-blue'>学生认证</text>，认证后即可查看联系人的具体信息		
+	</view>
+
+	<!-- 留言 -->
+	<view class="commentWrap">
+		<view class='comment'> 
+			<text> 留言区  </text>
+		</view>		
+		<block wx:for="{{commentShow}}" wx:for-item="fatherComment" wx:key="fatherComment">  
+		    <view class="list">
+				<view class="first" bindtap="replyComment" data-id="{{fatherComment.id}}" data-username="{{fatherComment.userName}}">
+					<view class="message">
+						<view class="img">
+							<image src="{{fatherComment.userAvatarurl}}"></image>
+						</view>
+						<view class="name">{{fatherComment.userName}}</view>
+						<view class="time">{{fatherComment.commentTime}}</view>
+					</view>
+					<view class="content">{{fatherComment.commentData}}</view>
+				</view>
+				<block wx:for="{{fatherComment.commentTwo}}" wx:for-item="childComment" wx:key="childComment">
+					<view class="second" bindtap="replyComment" data-id="{{fatherComment.id}}" data-username="{{childComment.userName}}">
+						<view class="message">
+							<view class="img">
+								<image src="{{childComment.userAvatarurl}}"></image>
+							</view>
+							<view class="name">{{childComment.userName}}</view>
+							<view class="time">{{childComment.commentTime}}</view>
+						</view>
+						<view class="content">{{childComment.commentData}}</view>
+					</view>
+				</block>	
+			</view>
+		</block>
+	</view>
+	<!-- 底部留言/联系卖家 -->
+	<view class='bottom' wx:if="{{ showBottom }}">
+		<view class='btn' bindtap='onComment' wx:if="{{!detailList.isMe}}">
+			<icon class="iconfont icon-liuyan"></icon>留言
+		</view>
+		<view class='btn_me' wx:if="{{detailList.isMe}}">
+			<view class="downLeft" bindtap="end">
+                <icon class="iconfont icon-xiaolian"></icon>完成交易
+            </view>
+            <view class="downRight">
+				<view class="comment_me" bindtap="onComment">
+					<icon class="iconfont icon-liuyan"></icon><text>留言</text>		
+				</view>
+				<view class="edit_me" bindtap="edit">
+					<icon class="iconfont icon-bianji"></icon><text>编辑</text>		
+				</view>
+            </view>
+				<!-- <view  wx:if="{{detailList.goodState===0}}" bindtap="end" data-id="{{detailList.goodId}}"><icon class="iconfont icon-xinjian"></icon>完成交易</view>
+                <view  wx:if="{{detailList.goodState===1}}"><icon class="iconfont icon-caozuochenggong"></icon>已完成</view>-->
+
+
+			<!--<block wx:if="{{ !detailList.isMe && identify }}">-->
+				<!--<view bindtap="personal" data-receiveropenid="{{detailList.openid}}" data-goodtitle="{{detailList.goodTitle}}"><icon class="iconfont icon-xinjian"></icon>私信</view>-->
+			<!--</block>-->
+			<!--<block wx:if="{{ !detailList.isMe && !identify }}">-->
+				<!--<view bindtap="cantPersonal"><icon class="iconfont icon-xinjian"></icon>私信</view>-->
+			<!--</block>-->
+			<!-- <block wx:if="{{ goodProperty==1 }}">
+				<view bindtap="personal" data-receiveropenid="{{detailList.openid}}" data-goodtitle="{{detailList.goodTitle}}"><icon class="iconfont icon-xinjian"></icon>联系求购者</view>
+			</block> -->
+		</view>
+	</view>
+	<!-- 底部评论留言 -->
+	<form wx:if="{{ comment }}" bindsubmit="submitForm" report-submit="true">
+	  <view class="release">
+	    <view class="replyinfo1">
+	      <icon type="clear" size="18" bindtap="cancleComment"></icon>
+	      <text class='replyTips'> 回复  {{ commentUsername }}</text>		
+	    </view>
+	    <view class="replyinfo2">
+	      <textarea placeholder-class="input_null" fixed="true" maxlength="-1" show-confirm-bar="false" cursor-spacing="18" auto-height="true" placeholder="请输入回复" name="comment" focus="true"value="{{commentValue}}"></textarea>
+	      <button form-type="submit" class="submit">发送</button>
+	    </view>
+	  </view>
+	</form>
+
+
+</view>
+

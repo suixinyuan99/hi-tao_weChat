@@ -1,0 +1,62 @@
+page{
+	background: #eee;
+}
+.list{
+	background: #fff;
+	display: flex;
+	height: 150rpx;
+	margin: 5rpx 0;
+}
+.left{
+	width: 110rpx;
+	height: 110rpx;
+	/*font-size: 43rpx;*/
+	flex:1;
+	text-align: center;
+	line-height: 110rpx;
+	border-radius: 50%;
+	margin: 10rpx;
+	border:3px solid #aaa;
+}
+.left_img{
+	text-align: center;
+	vertical-align: middle;
+	margin:auto 0;
+}
+.left_img image{
+	width: 120rpx;
+	height: 120rpx;
+	border-radius: 50%;
+	border:3px solid #aaa;
+	margin: auto 10rpx;
+}
+.center{
+	flex: 3;
+	display: flex;
+	flex-direction: column;
+	margin: 20rpx;
+}
+.center .top .time{
+	color: #aaa;
+	font-size: 35rpx;
+	margin-left: 20rpx;
+}
+.center .down{
+	margin-top: 10rpx;
+}
+.right{
+	flex: 1;
+	margin: auto 0;
+}
+.right image{
+	width: 100rpx;
+	height: 100rpx;
+}
+.personname{
+	font-size: 30rpx;
+}
+.persontime{
+	margin-left: 20rpx;
+	font-size: 25rpx;
+	color: #aaa;
+}

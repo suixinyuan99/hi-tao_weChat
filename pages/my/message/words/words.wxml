@@ -1,0 +1,27 @@
+<view class="message">
+    <view wx:if="{{show}}">
+    <block wx:for="{{personal}}">
+        <div class="personal list" bindtap="personal" data-goodid="{{item.goodId}}" data-goodproperty="{{item.property}}">
+            <div class="left_img">
+                <image src="{{item.avartar}}"></image>
+            </div>
+            <div class="center">
+                <div class="persontop">
+                    <div class="personname">{{item.userName}}</div>
+                    <div class="persontime">{{item.date}}</div>
+                </div>
+                <div class="down">
+                    {{item.commentContent}}
+                </div>
+            </div>
+            <div class="right" wx:if="{{item.showImg}}">
+                <image src="{{item.imageUrl}}"></image>
+            </div>
+        </div>
+    </block>
+    </view>
+    <view wx:if="{{!show}}" class="noData">
+        	<icon class="iconfont icon-wutupianyemian"></icon>
+        	<view>这里还没有信息哦！</view>
+    </view>
+</view>

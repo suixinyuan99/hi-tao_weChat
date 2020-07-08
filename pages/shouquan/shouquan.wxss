@@ -1,0 +1,14 @@
+.page{
+    text-align: center;
+}
+image{
+    width: 200px;
+    height: 200px;
+    margin-top: 100px;
+}
+.shouquan{
+    margin-top: 100px;
+    background: #F3490A;
+    color: white;
+    width:60%;
+}

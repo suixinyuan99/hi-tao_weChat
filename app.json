@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/shouquan/shouquan",
+    "pages/index/index",
+    "pages/publish/publish/publish",
+    "pages/publish/sell/sell",
+    "pages/publish/buy/buy",
+    "pages/my/my",
+    "pages/my/myIdentification/myIdentification",
+    "pages/my/myPublish/myPublish",
+    "pages/my/myCollection/myCollection",
+    "pages/my/message/message",
+    "pages/my/message/words/words",
+    "pages/my/message/system/system",
+    "pages/my/contactUs/contactUs",
+    "pages/detailIndex/detailIndex",
+    "pages/edit/edit"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#E34A07",
+    "navigationBarTitleText": "西电hi淘",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#2c2c2c",
+    "selectedColor": "#E34A07",
+    "borderStyle": "white",
+    "list": [
+      {
+        "selectedIconPath": "images/indexSelect.png",
+        "iconPath": "images/index.png",
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "selectedIconPath": "images/publishSelect.png",
+        "iconPath": "images/publish.png",
+        "pagePath": "pages/publish/publish/publish",
+        "text": "发布"
+      },
+      {
+        "selectedIconPath": "images/mySelect.png",
+        "iconPath": "images/my.png",
+        "pagePath": "pages/my/my",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

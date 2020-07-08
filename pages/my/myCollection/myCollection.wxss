@@ -1,0 +1,227 @@
+.top{
+  display: block;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+/*搜索框*/
+
+.search{
+  background: #fff;
+  width: 90%;
+  margin:auto;
+}
+.search_arr {
+  position: relative;
+  border: 1px solid #d0d0d0;
+  border-radius: 20rpx;
+}
+.search_arr input{
+  margin-left: 60rpx;
+  height: 70rpx;
+  border-radius: 20rpx;
+}
+.bc_text {
+  line-height: 68rpx;
+  height: 68rpx;
+  margin-top: 34rpx;
+}
+ 
+.searchcion {
+  margin: 10rpx 10rpx 10rpx 10rpx;
+  position: absolute;
+  left:5rpx;
+  top:5rpx;
+  z-index: 2;
+  text-align: center;
+}
+
+
+
+/*导航栏*/
+.swiper-tab{  
+    display: block;
+    z-index: 10;
+    /*position: fixed;*/
+    width: 100%;  
+    /*border-top: 4rpx solid #fff; */
+    border-bottom: 2rpx solid #fff; 
+    padding-top: 20rpx;
+    text-align: center;  
+    line-height: 70rpx;
+    background: #fff;
+}  
+.swiper-tab-list{  
+    font-size: 40rpx;  
+    font-weight: 550;
+    display: inline-block;  
+    width: 50%;  
+    color: #000; 
+    margin-bottom: 7rpx; 
+}  
+.swiper-tab-list view{
+    width:100%;
+    text-align:center;
+    margin:auto;
+  border-bottom: 4rpx solid #ccc;
+}
+.swiper-tab-list .on{  
+  color: #F3490A;
+  border-bottom: 4rpx solid #F3490A;
+}  
+  
+.swiper-box{ 
+  position: absolute;
+  display: inline-block; 
+  margin-top:160rpx;
+  height: 85%; 
+  width: 100%; 
+  overflow: hidden; 
+  margin-bottom:100rpx;
+}  
+
+/*转让*/
+.info-item{
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  /*padding-bottom: 30rpx;
+  padding-right:20rpx;*/
+  padding:20rpx 20rpx 10rpx 40rpx;
+}
+.info-item .mask{
+  position: absolute;
+  height: 220rpx;
+  line-height: 280rpx;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  z-index:990;
+  background-color: rgba(255,255,255,0.7);
+}
+.info-item .mask image{
+  transform:rotate(-15deg);
+  height: 40%;
+  width:260rpx;
+}
+.leftSide{
+  flex:1;
+}
+  .showPicture{
+    position: relative;
+    width: 220rpx;
+    height: 220rpx;
+
+  }
+  .showPicture image{
+    width: 100%;
+    height: 100%;
+    border-radius: 15rpx;
+  }
+  .showPicture .tag{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #F3490A;
+    border-radius: 0 0 15rpx 15rpx;
+    text-align: center;
+    font-size: 26rpx;
+  }
+
+.rightSide{
+  flex:1.5;
+  margin-left: 20rpx;
+  position: relative;
+}
+  .title{
+    font-size: 30rpx;
+    line-height: 50rpx;
+  }
+  .title text{
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    -webkit-line-clamp: 2;
+    width:95%;
+    -webkit-box-orient: vertical;
+    align-content: center;
+  }
+  .priceAndWatch{
+    margin:10rpx 0;
+    width:90%;
+    height:60rpx;
+    line-height: 60rpx;
+  }
+  .priceAndWatch text{
+    font-size:30rpx;
+  }
+  .priceAndWatch .price{
+    float: left;
+    color: #e73349;
+    font-size: 32rpx;
+  }
+  .priceAndWatch .watch{
+    float: right;
+    color:#666;
+  }
+
+
+  
+  .timeCollect{
+    position: absolute;
+    bottom: 0rpx;
+    font-size: 26rpx;
+    color:#666;
+  }
+  .date{
+    float: left;
+    height:45rpx;
+    line-height: 45rpx;
+  }
+  .tag{
+    float: left;
+  }
+  .tag image{
+    margin-left: 66rpx;
+    height: 45rpx;
+    width: 45rpx;
+    margin-right: 10rpx;
+  }
+.noData{
+    margin-top: 30%;
+    vertical-align: middle;
+    text-align: center;
+}
+.noData .iconfont{
+    font-size: 250rpx;
+    color:#666;
+}
+.noData view{
+    font-size: 40rpx;
+    color: #666;
+}
+
+
+.down{
+  display: flex;
+  justify-content:flex-end;
+  width:90%;
+  margin-bottom: 20rpx;
+}
+.end{
+  width: 40%;
+  padding: 20rpx 0;
+  font-size: 40rpx;
+  text-align: center;
+  background: #F3490A;
+  border-radius: 10rpx;
+}
+.list{
+  border-bottom: 1px solid #aaa;
+}
